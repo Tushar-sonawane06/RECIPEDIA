@@ -12,28 +12,44 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x] # Using a stable LTS version to minimize variables
+        node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-    - name: Use Node.js ${{ matrix.node-version }}
+    - name: Setup Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: |
-          frontend/package-lock.json
-          backend/package-lock.json
 
+    # ---------- Frontend ----------
     - name: Install Frontend Dependencies
       run: npm ci
       working-directory: ./frontend
 
     - name: Run Frontend Tests
+      env:
+        NODE_ENV: test
+        VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
       run: npm test
       working-directory: ./frontend
 
+    - name: Build Frontend
+      env:
+        NODE_ENV: production
+        VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+      run: npm run build
+      working-directory: ./frontend
+
+    # ---------- Backend ----------
     - name: Install Backend Dependencies
-      run: npm install
+      run: npm ci
+      working-directory: ./backend
+
+    - name: Run Backend Tests
+      env:
+        NODE_ENV: test
+      run: npm test
       working-directory: ./backend

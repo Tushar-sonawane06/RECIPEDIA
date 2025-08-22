@@ -50,7 +50,6 @@ const Register = () => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-pink-50 to-white p-4">
       <form className="bg-white rounded-lg shadow-md w-full max-w-sm space-y-4 p-6 border-t-4 border-red-400" onSubmit={handleSubmit}>
-        {/* Logo/Icon */}
         <motion.div className="flex items-center justify-center mb-4" initial={{ y: -10 }} animate={{ y: 0 }} whileHover={{ scale: 1.05, rotate: [0, 5, -5, 0] }}>
           <div className="bg-red-400 rounded-lg flex items-center justify-center w-12 h-12">
             <ChefHat className="w-5 h-5 text-white" />
@@ -61,11 +60,9 @@ const Register = () => {
         <p className="text-xs text-center text-gray-500">Join Recipedia! Create your account and start your culinary adventure</p>
         {error && <p className="text-red-500 text-xs text-center">{error}</p>}
 
-        {/* Inputs */}
         <Input placeholder="Username" name="username" value={formData.username} onChange={handleChange} icon={User} required />
         <Input placeholder="Email" type="email" name="email" value={formData.email} onChange={handleChange} icon={Mail} required />
 
-        {/* Password */}
         <div className="relative">
           <input
             type={showPassword ? "text" : "password"}

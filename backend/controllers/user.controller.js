@@ -1,50 +1,95 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const asyncHandler = require('../utils/asynchandler');
 
-exports.getProfile = async (req, res) => {
-  try {
-    if (req.user.email !== req.params.email) return res.status(403).json({ message: 'Access denied' });
-
-    const user = await User.findOne({ email: req.params.email })
-      .populate('favoriteRecipe likedRecipes savedRecipes recentComments.recipe')
-      .select('-password');
-
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching profile', error: err.message });
+exports.getProfile = asyncHandler(async (req, res) => {
+  if (req.user.email !== req.params.email) {
+    return res.status(403).json({ 
+      success: false, 
+      message: 'Access denied' 
+    });
   }
-};
 
-exports.updateProfile = async (req, res) => {
-  try {
-    if (req.user.email !== req.params.email) return res.status(403).json({ message: 'Access denied' });
+  const user = await User.findOne({ email: req.params.email })
+    .populate('favoriteRecipe likedRecipes savedRecipes recentComments.recipe')
+    .select('-password');
 
-    const updateData = req.body;
+  if (!user) {
+    return res.status(404).json({ 
+      success: false, 
+      message: 'User not found' 
+    });
+  }
 
-    if (updateData.password) {
-      if (updateData.password.length < 6)
-        return res.status(400).json({ message: 'Password too short' });
+  res.status(200).json({ 
+    success: true, 
+    message: 'Profile fetched successfully', 
+    data: user 
+  });
+});
 
-      updateData.password = await bcrypt.hash(updateData.password, 12);
+
+exports.updateProfile = asyncHandler(async (req, res) => {
+  if (req.user.email !== req.params.email) {
+    return res.status(403).json({ 
+      success: false, 
+      message: 'Access denied' 
+    });
+  }
+
+  const updateData = req.body;
+
+  if (updateData.password) {
+    if (updateData.password.length < 6) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Password too short' 
+      });
     }
-
-    const user = await User.findOneAndUpdate({ email: req.params.email }, { $set: updateData }, { new: true }).select('-password');
-
-    res.json({ message: 'Profile updated', user });
-  } catch (err) {
-    res.status(500).json({ message: 'Error updating profile', error: err.message });
+    updateData.password = await bcrypt.hash(updateData.password, 12);
   }
-};
 
-exports.deleteAccount = async (req, res) => {
-  try {
-    if (req.user.email !== req.params.email) return res.status(403).json({ message: 'Access denied' });
+  const user = await User.findOneAndUpdate(
+    { email: req.params.email },
+    { $set: updateData },
+    { new: true }
+  ).select('-password');
 
-    await User.findOneAndDelete({ email: req.params.email });
-    res.json({ message: 'Account deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error deleting account', error: err.message });
+  if (!user) {
+    return res.status(404).json({ 
+      success: false, 
+      message: 'User not found' 
+    });
   }
-};
+
+  res.status(200).json({ 
+    success: true, 
+    message: 'Profile updated successfully', 
+    data: user 
+  });
+});
+
+
+exports.deleteAccount = asyncHandler(async (req, res) => {
+  if (req.user.email !== req.params.email) {
+    return res.status(403).json({ 
+      success: false, 
+      message: 'Access denied' 
+    });
+  }
+
+  const deletedUser = await User.findOneAndDelete({ email: req.params.email });
+
+  if (!deletedUser) {
+    return res.status(404).json({ 
+      success: false, 
+      message: 'User not found' 
+    });
+  }
+
+  res.status(200).json({ 
+    success: true, 
+    message: 'Account deleted successfully', 
+    data: null 
+  });
+});

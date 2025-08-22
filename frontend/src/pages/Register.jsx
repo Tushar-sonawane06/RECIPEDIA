@@ -5,11 +5,13 @@ import { Mail, Lock, Phone, MapPin, Calendar, ArrowRight, Eye, EyeOff, ChefHat, 
 
 const Register = () => {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "", email: "", password: "", age: "", gender: "", phone: "", address: "", agree: false
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
 
   const handleChange = e => {
     const { name, value, type, checked } = e.target;
@@ -115,6 +117,7 @@ const Register = () => {
           Already have an account? <span className="text-red-500 underline cursor-pointer" onClick={() => navigate("/login")}>Login</span>
         </p>
       </form>
+
     </div>
   );
 };

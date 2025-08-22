@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
@@ -6,10 +6,10 @@ import { Mail, Lock, ArrowRight } from 'lucide-react';
 
 import AuthLayout from '../components/AuthLayout';
 import FormInput from '../components/FormInput';
-import AuthButton from '../components/AuthButton';
 import ErrorAlert from '../components/ErrorAlert';
+import { authService } from '../services/authService';
 
-const Login = ({ setIsLoggedIn }) => {
+const Login = ({ onAuthSuccess }) => {
   const navigate = useNavigate();
 
   // Form state
@@ -18,7 +18,7 @@ const Login = ({ setIsLoggedIn }) => {
     password: "",
   });
 
-  const [agreeTerms, setAgreeTerms] = useState(false); // Added missing state
+  const [agreeTerms, setAgreeTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -37,7 +37,7 @@ const Login = ({ setIsLoggedIn }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) return "Please enter a valid email address";
 
-    if (!agreeTerms) return "Please agree to the Terms of Use & Privacy Policy"; // Added back validation
+    if (!agreeTerms) return "Please agree to the Terms of Use & Privacy Policy";
 
     return null;
   };
@@ -56,8 +56,6 @@ const Login = ({ setIsLoggedIn }) => {
     setError("");
 
     try {
-      console.log("Attempting login:", { email: formData.email });
-
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/login`,
         {
@@ -68,11 +66,14 @@ const Login = ({ setIsLoggedIn }) => {
 
       const { token, user } = response.data;
 
-      // Store auth info
-      sessionStorage.setItem("token", token);
-      sessionStorage.setItem("user", JSON.stringify(user));
+      // Store auth info using authService
+      authService.setAuth(token, user);
 
-      setIsLoggedIn(true);
+      // Notify parent component about successful authentication
+      if (onAuthSuccess) {
+        onAuthSuccess();
+      }
+
       navigate("/home");
     } catch (err) {
       console.error("Login error:", err);
@@ -158,25 +159,17 @@ const Login = ({ setIsLoggedIn }) => {
             </label>
           </motion.div>
 
-          {/* Submit Button */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
+          {/* Sign In Button */}
+          <motion.button
+            type="submit"
+            className="w-full bg-gradient-to-r from-red-400 to-pink-500 text-white py-2 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition"
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.5 }}
+            disabled={loading}
           >
-            <AuthButton 
-              type="submit" 
-              loading={loading}
-              disabled={loading}
-            >
-              {loading ? "Signing In..." : (
-                <>
-                  Sign In
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </AuthButton>
-          </motion.div>
+            {loading ? "Signing In..." : "Sign In"}
+            <ArrowRight className="text-white font-bold" />
+          </motion.button>
         </form>
 
         {/* Sign Up Link */}

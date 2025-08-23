@@ -54,15 +54,7 @@
 - 👤 User Profiles to view and manage favorite recipes
 - 📱 Responsive Design for all devices
 - 📦 MongoDB Cloud Storage for efficient data management
-
-![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png)
-
-**🔗 Deployed Links**
-
-- 🔸 **Frontend**: [https://recipedia-frontend-q872.onrender.com](https://recipedia-frontend-q872.onrender.com)
-
-- 🔹 **Backend (API)**: [https://recipedia-7xa0.onrender.com/](https://recipedia-7xa0.onrender.com/)
-
+- 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="150%">
 
 ![GSSoC Logo](/RECIPEDIA/frontend/public/gssoc%20logo.png)
@@ -207,15 +199,6 @@ We love our contributors! If you'd like to help, please check out our [`CONTRIBU
 
 [![Contributors](https://img.shields.io/github/contributors/MeghanaDG04/RECIPEDIA?style=for-the-badge)](https://github.com/MeghanaDG04/RECIPEDIA/graphs/contributors)
 
-<!-- Contributors avatars (auto-updating) -->
-<p align="left">
-  <a href="https://github.com/MeghanaDG04/RECIPEDIA/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=MeghanaDG04/RECIPEDIA" alt="Contributors" />
-  </a>
-</p>
-
-See the full list of contributors and their contributions on the [`GitHub Contributors Graph`](https://github.com/MeghanaDG04/RECIPEDIA/graphs/contributors).
-
 <h2 align="center">
 <p style="font-family:var(--ff-philosopher);font-size:3rem;"><b> Show some <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Red%20Heart.png" alt="Red Heart" width="40" height="40" /> by starring this awesome repository!
 </p>
@@ -238,25 +221,6 @@ Feel free to open issues or discussions if you have any feedback, feature sugges
 **📄 License**
 
 This project is licensed under the MIT License - see the [`License`](https://github.com/MeghanaDG04/RECIPEDIA/blob/main/LICENSE) file for details.
-
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="150%">
-
-**⭐ Stargazers**
-
-<div align="center">
-  <a href="https://github.com/MeghanaDG04/RECIPEDIA/stargazers">
-    <img src="https://reporoster.com/stars/MeghanaDG04/RECIPEDIA?type=svg&limit=100&names=false" alt="Stargazers" />
-  </a>
-</div>
-
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="150%">
-
-**🍴 Forkers**
-
-<div align="center">
-  <a href="https://github.com/MeghanaDG04/RECIPEDIA/network/members">
-    <img src="https://reporoster.com/forks/MeghanaDG04/RECIPEDIA?type=svg&limit=100&names=false" alt="Forkers" />
-  </a>
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="150%">
 
@@ -290,7 +254,7 @@ This project is licensed under the MIT License - see the [`License`](https://git
 
 **👨‍💻 Built with ❤️ by the RECIPEDIA And Team**
 
-**❤️ Meghana Gaonkar and Contributors ❤️** [open an issue](https://github.com/MeghanaDG04/RECIPEDIA/issues) | [Watch Demo](https://recipedia-frontend-q872.onrender.com/)
+**❤️ Meghana Gaonkar and Contributors ❤️** [Open an Issue](https://github.com/MeghanaDG04/RECIPEDIA/issues) 
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="150%">
 

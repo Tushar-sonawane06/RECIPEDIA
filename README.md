@@ -239,7 +239,7 @@ This project is licensed under the MIT License - see the [`License`](https://git
 
 | Role          | Name               | GitHub Profile                                      | LinkedIn Profile                                                        |
 | ------------- | ------------------ | --------------------------------------------------- | ----------------------------------------------------------------------- |
-| Mentor 1   | Arish Singh |   | [arish-singh](https://www.linkedin.com/in/arish-singh-63a5b732a/) |
+| Mentor 1   | Arish Singh | [Arishsingh](https://github.com/Arishsingh)  | [arish-singh](https://www.linkedin.com/in/arish-singh-63a5b732a/) |
 | Mentor 2     | Krishna Sen |  [KrishnaSen01](https://github.com/KrishnaSen01)   | [krishna-sen](https://www.linkedin.com/in/krishna-sen-5bb829304/)    |
 
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%">

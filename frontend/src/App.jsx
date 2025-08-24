@@ -115,7 +115,6 @@ function AppContent() {
         <Route path="/add-recipe" element={<AddRecipe />} />
         <Route path="/about" element={<About />} />
         <Route path="/explore" element={<Explore />} />
-        <Route path="/explore" element={<Explore />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms-conditions" element={<TermsConditions />} />
 

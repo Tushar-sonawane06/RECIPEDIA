@@ -29,12 +29,11 @@ function App() {
 
   return (
     <Router>
-```
-      <div className="app-container">
+      <div className="app-container min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
         <ScrollToTop />
         <Header />
         <Routes>
-```       {/* Core Routes */}
+          {/* Core Routes */}
           <Route path="/" element={<RecipeHome />} />
           <Route path="/home" element={<RecipeHome />} />
           <Route path="/login" element={<div className="login-bg"><Login setIsLoggedIn={setIsLoggedIn} /></div>} />

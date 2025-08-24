@@ -11,6 +11,14 @@
 .back-button:hover {
   color: #222;
 }
+
+/* Dark mode support for back button */
+.dark .back-button {
+  color: #cbd5e1;
+}
+.dark .back-button:hover {
+  color: #f1f5f9;
+}
 .back-arrow {
   margin-right: 6px;
 }
@@ -24,6 +32,12 @@
   border-radius: 12px;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
   animation: fadeIn 0.6s ease;
+}
+
+/* Dark mode support for profile container */
+.dark .profile-container {
+  background: #1e293b;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fadeIn {
@@ -60,6 +74,14 @@
   margin-top: 6px;
 }
 
+/* Dark mode support for profile name and bio */
+.dark .profile-name {
+  color: #f1f5f9;
+}
+.dark .profile-bio {
+  color: #cbd5e1;
+}
+
 /* === Profile Sections === */
 .profile-section {
   margin-top: 25px;
@@ -71,6 +93,11 @@
   border-bottom: 2px solid #ff6f61;
   padding-bottom: 4px;
   color: #333;
+}
+
+/* Dark mode support for section headers */
+.dark .profile-section h2 {
+  color: #f1f5f9;
 }
 
 /* === Favorite Recipe Card === */
@@ -122,8 +149,26 @@
   font-size: 11px;
   color: #777;
 }
+
+/* Dark mode support for recipe cards and comments */
+.dark .recipe-card,
+.dark .comment-card {
+  background: #334155;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.dark .recipe-card h3 {
+  color: #f1f5f9;
+}
+.dark .cuisine-tag {
+  color: #cbd5e1;
+}
 .liked {
   background: #ffe7e7;
+}
+
+/* Dark mode support for liked recipes */
+.dark .liked {
+  background: #4c1d1d;
 }
 
 /* === Recent Comments === */

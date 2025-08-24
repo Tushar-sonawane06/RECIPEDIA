@@ -17,6 +17,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Dark mode body background (fixed) */
+html.dark body {
+  background-color: #1e293b; /* slate-800 */
+}
+
 #root {
   min-height: 100vh;
   overflow-x: hidden;
@@ -54,15 +59,19 @@ a {
   text-decoration: none;
 }
 
-.ingrdientsDiv{
-  @apply dark:bg-slate-800 !text-black dark:!text-white
+/* Ingredient styles with dark mode fixes */
+.ingrdientsDiv {
+  @apply bg-white dark:bg-slate-800 text-black dark:text-white;
 }
-.ingredientsH{
-  @apply  text-xl
+
+.ingredientsH {
+  @apply text-xl text-black dark:text-white;
 }
-.ingredientsH2{
-  @apply !text-red-500 text-xl
+
+.ingredientsH2 {
+  @apply text-red-500 text-xl;
 }
-.ingredientsUl{
-  @apply list-disc ml-6 marker:text-black dark:marker:text-white
+
+.ingredientsUl {
+  @apply list-disc ml-6 marker:text-black dark:marker:text-white text-black dark:text-white;
 }

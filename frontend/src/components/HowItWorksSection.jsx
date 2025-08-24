@@ -30,8 +30,10 @@ const StepCard = ({ step, index, isActive, onHover }) => {
   
   return (
     <div 
-      className={`relative p-8 rounded-2xl transition-all duration-700 transform hover:-translate-y-4 ${
-        isActive ? 'bg-white dark:bg-slate-800 shadow-2xl scale-105' : 'bg-white/50 dark:bg-slate-800/50 shadow-lg hover:shadow-xl'
+      className={`group relative p-8 rounded-2xl transition-all duration-700 transform hover:-translate-y-4 cursor-pointer ${
+        isActive
+          ? 'bg-gray-100 dark:!bg-gray-200 shadow-2xl scale-105 border border-gray-300 dark:border-gray-400'
+          : 'bg-gray-100 dark:!bg-gray-200 shadow-lg hover:bg-gray-200 dark:hover:!bg-gray-300 hover:shadow-xl border border-transparent dark:hover:border-gray-400 dark:hover:ring-1 dark:hover:ring-gray-400/60'
       }`}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(-1)}
@@ -43,7 +45,7 @@ const StepCard = ({ step, index, isActive, onHover }) => {
       </div>
 
       {/* Animated Background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${step.bgColor} opacity-0 ${isActive ? 'opacity-5' : ''} rounded-2xl transition-opacity duration-500`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${step.bgColor} opacity-0 ${isActive ? 'opacity-5' : ''} dark:hidden rounded-2xl transition-opacity duration-500`} />
       
       {/* Icon */}
       <div className={`relative mb-6 mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br ${step.bgColor} shadow-lg flex items-center justify-center transform transition-all duration-500 ${isActive ? 'scale-110 rotate-3' : ''}`}>
@@ -55,17 +57,17 @@ const StepCard = ({ step, index, isActive, onHover }) => {
 
       {/* Content */}
       <div className="relative z-10 text-center">
-        <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
+        <h3 className="text-xl font-bold mb-4 text-gray-900 dark:!text-gray-900 group-hover:!text-gray-900">
           {step.title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+        <p className="text-gray-600 dark:!text-gray-700 group-hover:!text-gray-700 mb-6 leading-relaxed">
           {step.description}
         </p>
 
         {/* Features List */}
         <div className="space-y-2">
           {step.features.map((feature, featureIndex) => (
-            <div key={featureIndex} className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+            <div key={featureIndex} className="flex items-center justify-center gap-2 text-sm text-gray-600 dark:!text-gray-700 group-hover:!text-gray-700">
               <CheckCircle className="w-4 h-4 text-green-500" />
               <span>{feature}</span>
             </div>

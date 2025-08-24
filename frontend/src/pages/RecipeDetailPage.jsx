@@ -218,15 +218,15 @@ const RecipeDetailPage = () => {
 
     <section className="prose max-w-none dark:prose-invert">
       <h2 className="text-2xl font-semibold text-[#d35400] pb-2">About this Recipe</h2>
-      <p className='dark:text-white text-red-500'>{recipe.about}</p>
+      <p className='text-gray-700 dark:text-white'>{recipe.about}</p>
       <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">Ingredients</h2> 
-      <ul className="list-disc dark:text-white pl-6 marker:text-red-500 text-red-500">
+      <ul className="list-disc pl-6 marker:text-red-500 text-gray-700 dark:text-white">
         {recipe.ingredients.map((item, i) => (
           <li key={i}>{item}</li>
         ))}
       </ul>
       <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">Preparation Steps</h2>
-      <ol className="list-decimal pl-6 space-y-2 dark:text-white  text-red-500">
+      <ol className="list-decimal pl-6 space-y-2 text-gray-700 dark:text-white">
         {recipe.preparationSteps.map((step, i) => (
           <li key={i}>{step}</li>
         ))}
@@ -264,13 +264,13 @@ const RecipeDetailPage = () => {
       <div className="space-y-4 mt-6">
         {comments.length > 0 ? (
           comments.map((c) => (
-            <div key={c.id} className="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg shadow">
-              <strong>{c.user}</strong>
-              <p>{c.text}</p>
-            </div>
+                    <div key={c.id} className="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg shadow">
+          <strong className="text-gray-800 dark:text-white">{c.user}</strong>
+          <p className="text-gray-700 dark:text-gray-300">{c.text}</p>
+        </div>
           ))
         ) : (
-          <div className="bg-gray-100 dark:bg-slate-700 p-4 rounded-lg shadow text-center text-gray-500 dark:text-white">
+          <div className="bg-gray-100 dark:bg-slate-700 p-4 rounded-lg shadow text-center text-gray-600 dark:text-gray-300">
             No comments yet. Be the first to share your thoughts!
           </div>
         )}

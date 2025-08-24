@@ -143,7 +143,7 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                     <FaUserCircle size={32} />
                   </button>
                   <div
-                    className={`absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20 py-1 origin-top-right transition-all duration-200 ease-out ${
+                    className={`absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-md shadow-xl z-20 py-1 origin-top-right transition-all duration-200 ease-out ${
                       profileDropdownOpen
                         ? "opacity-100 scale-100"
                         : "opacity-0 scale-95 pointer-events-none"
@@ -151,14 +151,14 @@ const Navbar = ({ isAuthenticated, onLogout }) => {
                   >
                     <Link
                       to="/profile"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-amber-100"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-white hover:bg-amber-100 dark:hover:bg-slate-700"
                       onClick={closeProfileDropdown}
                     >
                       Profile
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left flex items-center px-4 py-2 text-sm text-red-500 hover:bg-amber-100"
+                      className="w-full text-left flex items-center px-4 py-2 text-sm text-red-500 hover:bg-amber-100 dark:hover:bg-slate-700"
                     >
                       <FaSignOutAlt className="mr-2" /> Logout
                     </button>

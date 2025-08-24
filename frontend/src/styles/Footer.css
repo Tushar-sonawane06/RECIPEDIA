@@ -54,7 +54,7 @@
   color: #f7fafc;
   text-decoration: none;
   transition: color 0.3s ease, transform 0.3s ease;
-  display: block;
+  display: inline-block;
   padding: 5px 0;
   border-radius: 4px;
   font-family: 'Poppins', sans-serif;

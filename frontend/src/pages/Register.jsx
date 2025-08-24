@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Mail, Lock, Phone, MapPin, Calendar, ArrowRight, Eye, EyeOff, User, ChefHat, XCircle } from "lucide-react";
+import { Mail, Lock, Phone, MapPin, Calendar, ArrowRight, Eye, EyeOff, User, ChefHat, XCircle, Sparkles } from "lucide-react";
 
 const CustomFormInput = ({ icon: Icon, type = "text", name, value, onChange, placeholder, required, autoComplete, min, max, minLength, error, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -143,7 +143,6 @@ const Register = () => {
       errors.password = "Password needs at least one special character.";
     }
 
-
     if (!age) {
       errors.age = "Age is required.";
     } else if (isNaN(parseInt(age)) || parseInt(age) < 1 || parseInt(age) > 120) {
@@ -214,8 +213,91 @@ const Register = () => {
     }
   };
 
+  const floatingVariants = {
+    animate: (i) => ({
+      y: [0, -20, 0],
+      x: [0, 10, 0],
+      rotate: [0, 5, 0],
+      transition: {
+        duration: 6 + i,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: i * 2
+      }
+    })
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-red-50 to-orange-100 p-4 font-sans antialiased">
+    <div 
+      className="fixed inset-0 bg-gradient-to-br from-red-50 via-pink-50 to-orange-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4 overflow-hidden font-sans antialiased"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 9999
+      }}
+    >
+      {/* Background Decorative Elements from AuthLayout */}
+      <motion.div 
+        className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-red-200/30 to-pink-200/30 rounded-full blur-3xl"
+        variants={floatingVariants}
+        animate="animate"
+        custom={0}
+      />
+      <motion.div 
+        className="absolute top-20 right-20 w-24 h-24 bg-gradient-to-r from-orange-200/30 to-yellow-200/30 rounded-full blur-2xl"
+        variants={floatingVariants}
+        animate="animate"
+        custom={1}
+      />
+      <motion.div 
+        className="absolute bottom-20 left-20 w-28 h-28 bg-gradient-to-r from-pink-200/30 to-rose-200/30 rounded-full blur-3xl"
+        variants={floatingVariants}
+        animate="animate"
+        custom={2}
+      />
+      <motion.div 
+        className="absolute bottom-10 right-10 w-36 h-36 bg-gradient-to-r from-blue-200/30 to-cyan-200/30 rounded-full blur-3xl"
+        variants={floatingVariants}
+        animate="animate"
+        custom={3}
+      />
+
+      {/* Floating Icons from AuthLayout */}
+      <motion.div
+        className="absolute top-16 right-16 text-red-300/50"
+        animate={{ 
+          rotate: [0, 360],
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ 
+          duration: 20, 
+          repeat: Infinity, 
+          ease: "linear" 
+        }}
+      >
+        <ChefHat className="w-8 h-8" />
+      </motion.div>
+      <motion.div
+        className="absolute bottom-16 left-16 text-pink-300/50"
+        animate={{ 
+          y: [0, -10, 0],
+          rotate: [0, 15, -15, 0]
+        }}
+        transition={{ 
+          duration: 4, 
+          repeat: Infinity, 
+          ease: "easeInOut" 
+        }}
+      >
+        <Sparkles className="w-6 h-6" />
+      </motion.div>
+
+      {/* Original Register Form - unchanged */}
       <motion.form
         className="bg-white rounded-2xl shadow-xl w-full max-w-md space-y-5 p-8 border-t-8 border-red-500 transform transition-all duration-300 hover:shadow-2xl"
         onSubmit={handleSubmit}

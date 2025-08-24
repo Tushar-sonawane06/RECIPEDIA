@@ -20,10 +20,12 @@ const Footer = () => {
         <div className="footer-section mb-4 links">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="/" className="hover:text-white transition-colors duration-300">Home</a></li>
+            {/* <li><a href="/" className="hover:text-white transition-colors duration-300">Home</a></li> */}
             <li><a href="/about" className="hover:text-white transition-colors duration-300">About</a></li>
             <li><a href="/add-recipe" className="hover:text-white transition-colors duration-300">Add Recipe</a></li>
             <li><a href="/profile" className="hover:text-white transition-colors duration-300">Profile</a></li>
+            <li><a href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</a></li>
+            <li><a href="/terms-conditions" className="hover:text-white transition-colors duration-300">Terms</a></li>
           </ul>
         </div>
 

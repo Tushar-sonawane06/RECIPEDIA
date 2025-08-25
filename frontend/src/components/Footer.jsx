@@ -19,22 +19,26 @@ const Footer = () => {
         <div className="footer-section links">
           <h4 className="text-lg font-semibold text-amber-400 mb-3">Quick Links</h4>
           <ul>
-            <li><a href="/" className="footer-link">Home</a></li>
-            <li><a href="/about" className="footer-link">About</a></li>
-            <li><a href="/add-recipe" className="footer-link">Add Recipe</a></li>
-            <li><a href="/profile" className="footer-link">Profile</a></li>
+
+            {/* <li><a href="/" className="hover:text-white transition-colors duration-300">Home</a></li> */}
+            <li><a href="/about" className="hover:text-white transition-colors duration-300">About</a></li>
+            <li><a href="/add-recipe" className="hover:text-white transition-colors duration-300">Add Recipe</a></li>
+            <li><a href="/profile" className="hover:text-white transition-colors duration-300">Profile</a></li>
+            <li><a href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</a></li>
+            <li><a href="/terms-conditions" className="hover:text-white transition-colors duration-300">Terms</a></li>
+
           </ul>
         </div>
 
         {/* Categories */}
         <div className="footer-section links">
           <h4 className="text-lg font-semibold text-amber-400 mb-3">Categories</h4>
-          <ul>
-            <li><a href="/veg" className="footer-link">Veg</a></li>
-            <li><a href="/nonveg" className="footer-link">Non-Veg</a></li>
-            <li><a href="/dessert" className="footer-link">Dessert</a></li>
-            <li><a href="/beverages" className="footer-link">Beverages</a></li>
-          </ul>
+         <ul>
+  <li><a href="/veg" className="transition-colors duration-300">Veg</a></li>
+  <li><a href="/nonveg" className="transition-colors duration-300">Non-Veg</a></li>
+  <li><a href="/dessert" className="transition-colors duration-300">Dessert</a></li>
+  <li><a href="/beverages" className="transition-colors duration-300">Beverages</a></li>
+</ul>
         </div>
 
         {/* Contact Info */}
@@ -42,7 +46,7 @@ const Footer = () => {
           <h4 className="text-lg font-semibold text-amber-400 mb-3">Contact Us</h4>
           <p className="text-sm text-gray-400">
             Email:{" "}
-            <a href="mailto:support@recipedia.com" className="footer-link">
+            <a href="mailto:support@recipedia.com" className="hover:text-red-500 transition-colors duration-300">
               support@recipedia.com
             </a>
           </p>
@@ -50,20 +54,17 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Social Icons */}
-      <div className="social-icons flex justify-center gap-5 mt-6">
-        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="social-link">
-          <FaFacebookF />
-        </a>
-        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="social-link">
-          <FaTwitter />
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-link">
-          <FaInstagram />
-        </a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="social-link">
-          <FaLinkedinIn />
-        </a>
+        {/* Social Icons */}
+        <div className="footer-section mb-6 links">
+          <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
+          <div className="social-icons flex space-x-6 text-2xl ">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaFacebookF /></a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaTwitter /></a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaInstagram /></a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaLinkedinIn /></a>
+          </div>
+        </div>
+
       </div>
 
       {/* Bottom Footer */}

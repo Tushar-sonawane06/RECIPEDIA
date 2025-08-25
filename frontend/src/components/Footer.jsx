@@ -65,8 +65,6 @@ const Footer = () => {
           </div>
         </div>
 
-      </div>
-
       {/* Bottom Footer */}
       <div className="footer-bottom mt-6 border-t border-gray-700 py-4 text-center text-sm text-gray-500">
         <div className="footer-legal space-x-3 mb-2">

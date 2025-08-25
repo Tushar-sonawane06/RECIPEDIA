@@ -1,11 +1,24 @@
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ recipe, searchQuery }) => {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
     navigate(`/recipes/${recipe.category}/${recipe.id}`);
+  };
+
+  // ✅ Function to highlight search term
+  const highlightText = (text, query) => {
+    if (!query) return text;
+
+    const regex = new RegExp(`(${query})`, 'gi');
+    const parts = text.split(regex);
+
+    return parts.map((part, index) =>
+      regex.test(part) ? <mark key={index} className="bg-yellow-300">{part}</mark> : part
+    );
   };
 
   return (
@@ -15,8 +28,12 @@ const RecipeCard = ({ recipe }) => {
     >
       <img 
         src={recipe.image} 
-        onError={(e) => { e.target.src = '/default.jpg' }} 
-        alt={recipe.name} 
+        onError={(e) => {
+        if (e.target.src !== '/default.jpg') {
+        e.target.src = '/default.jpg';
+        e.target.alt = 'Recipe image not available';
+       }
+      }}
         className="h-48 w-full object-cover" 
       />
       <div className="p-4 bg-white dark:bg-slate-800 border-t border-gray-200 dark:border-gray-700">

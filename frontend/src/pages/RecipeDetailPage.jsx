@@ -1,16 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaHeart, FaRegHeart, FaPlay } from 'react-icons/fa';
-import { IoPlaySkipForwardSharp, IoPlaySkipBackSharp } from 'react-icons/io5';
-import { IoMdSettings, IoMdPause } from 'react-icons/io';
-
+import { FaArrowLeft, FaHeart, FaRegHeart } from 'react-icons/fa';
 import allRecipes from '../data/recipes.json';
 import NotFoundPage from './NotFound.jsx';
 import '../styles/RecipeDetail.css';
 import { v4 as uuidv4 } from 'uuid';
+import AudioOverview from '../components/AudioOverview.jsx';
+import Box from '@mui/material/Box';
+import Rating from '@mui/material/Rating';
+import Typography from '@mui/material/Typography';
 
 const RecipeDetailPage = () => {
   const { category, recipeId } = useParams();
+const [value, setValue] = React.useState(3);
   const navigate = useNavigate();
 
   const [recipe, setRecipe] = useState(null);
@@ -19,33 +21,50 @@ const RecipeDetailPage = () => {
   const [newComment, setNewComment] = useState('');
   const [error, setError] = useState('');
 
+  // Speech states
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [speechRate, setSpeechRate] = useState(1);
   const [speechIndex, setSpeechIndex] = useState(0);
   const [spokenChars, setSpokenChars] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
 
-  const utteranceRef = useRef(null);
   const contentPartsRef = useRef([]);
 
+  // ✅ IMPROVED: Load recipe and prepare content with section titles
   useEffect(() => {
-    const found = allRecipes.find(r => r.id === recipeId && r.category === category);
+    const found = allRecipes.find(
+      (r) => r.id === recipeId && r.category === category
+    );
     setRecipe(found);
+
     if (found) {
-      const text = `${found.name}. ${found.about}. Ingredients Required, ${found.ingredients.join(', ')}. Preparation Steps, ${found.preparationSteps.join('. ')}`;
-      contentPartsRef.current = text.split('.');
+      // Build a clean array of logical parts directly for smoother, more reliable audio flow.
+      const parts = [
+        found.name,
+        "About this Recipe",
+        found.about,
+        "Ingredients",
+        ...found.ingredients, // Spread ingredients as individual spoken lines
+        "Preparation Steps",
+        ...found.preparationSteps, // Spread steps as individual spoken lines
+      ];
+
+      // Filter out any empty strings to prevent silent gaps
+      contentPartsRef.current = parts.filter(p => p && p.trim().length > 0);
+
+      // Reset speech state for the new content
       setSpeechIndex(0);
+      setSpokenChars(0);
+      
+      // If speech was active on a previous page, cancel it.
+      // The user can press play again to start the new content.
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
     }
+    // Dependency array is now correct, only runs when the recipe changes.
   }, [recipeId, category]);
 
+  // Cancel speech on unload
   useEffect(() => {
-    if (isSpeaking && speechIndex < contentPartsRef.current.length) {
-      speak(speechIndex);
-    }
-  }, [speechIndex, isSpeaking]);
-
-  useEffect(() => {
-    window.onbeforeunload = () => window.speechSynthesis.cancel();
     return () => window.speechSynthesis.cancel();
   }, []);
 
@@ -58,109 +77,39 @@ const RecipeDetailPage = () => {
       setError('Comment cannot be empty!');
       return;
     }
-    setComments([...comments, { id: uuidv4(), text: newComment.trim(), user: username }]);
+    setComments([
+      ...comments,
+      { id: uuidv4(), text: newComment.trim(), user: username },
+    ]);
     setNewComment('');
     setError('');
   };
 
-  const speak = (index) => {
-    if (index >= contentPartsRef.current.length) return;
-    const utterance = new SpeechSynthesisUtterance(contentPartsRef.current[index]);
-    utterance.rate = speechRate;
-    utterance.onboundary = (e) => {
-      if (e.name === 'word') {
-        const totalSpoken = contentPartsRef.current.slice(0, index).join(' ').length + e.charIndex;
-        setSpokenChars(totalSpoken);
-      }
-    };
-    utterance.onend = () => {
-      if (index + 1 < contentPartsRef.current.length) {
-        setSpeechIndex(prev => prev + 1);
-      } else {
-        setIsSpeaking(false);
-        setSpeechIndex(0);
-        setSpokenChars(0);
-      }
-    };
-    utteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const handlePlay = () => {
-    if (!isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(true);
-    }
-  };
-  const handlePause = () => {
-    window.speechSynthesis.pause();
-    setIsSpeaking(false);
-  };
-  const handleCancel = () => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-  };
-  const handleSkipForward = () => {
-    const newIndex = Math.min(speechIndex + 1, contentPartsRef.current.length - 1);
-    if (newIndex !== speechIndex) {
-      handleCancel();
-      setSpeechIndex(newIndex);
-      setIsSpeaking(true);
-    }
-  };
-  const handleSkipBack = () => {
-    const newIndex = Math.max(speechIndex - 1, 0);
-    if (newIndex !== speechIndex) {
-      handleCancel();
-      setSpeechIndex(newIndex);
-      setIsSpeaking(true);
-    }
-  };
-  const handleSpeed = () => {
-    const el = document.getElementById('speed');
-    el.classList.toggle('hidden');
-  };
-  const handleSeek = (e) => {
-    const newCharIndex = parseInt(e.target.value, 10);
-    setSpokenChars(newCharIndex);
-    let accumulated = 0;
-    for (let i = 0; i < contentPartsRef.current.length; i++) {
-      if (accumulated + contentPartsRef.current[i].length >= newCharIndex) {
-        setSpeechIndex(i);
-        break;
-      }
-      accumulated += contentPartsRef.current[i].length;
-    }
-  };
-  const handleSeekRelease = () => {
-    if (isDragging) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(true);
-      speak(speechIndex);
-      setIsDragging(false);
-    }
-  };
-
   if (!recipe) return <NotFoundPage />;
 
-  return(
-  <div className="recipe-detail-container max-w-4xl mx-auto px-4 pt-32 pb-16 dark:bg-slate-800 dark:text-white">
-    <button
-      onClick={() => navigate(`/${recipe.category}`)}
-      className="mb-6 px-4 font-bold py-2.5 bg-red-100 text-red-600 hover:text-white hover:bg-red-500 rounded-xl shadow flex items-center gap-2 w-fit transition-all duration-200"
-    >
-      <FaArrowLeft className="text-inherit" />
-      <span className="font-medium text-base">Back to {recipe.category}</span>
-    </button>
+  return (
+    <div className="recipe-detail-container max-w-4xl mx-auto px-4 pt-32 pb-16 dark:bg-slate-800 dark:text-white">
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(`/${recipe.category}`)}
+        className="mb-6 px-4 font-bold py-2.5 bg-red-100 text-red-600 hover:text-white hover:bg-red-500 rounded-xl shadow flex items-center gap-2 w-fit transition-all duration-200"
+      >
+        <FaArrowLeft className="text-inherit" />
+        <span className="font-medium text-base">Back to {recipe.category}</span>
+      </button>
 
-    <h1 className="text-4xl font-bold text-center my-10 text-[#d35400]">{recipe.name}</h1>
+      {/* Title */}
+      <h1 className="text-4xl font-bold text-center my-10 text-[#d35400]">
+        {recipe.name}
+      </h1>
 
-    <img
-      src={recipe.image}
-      onError={(e) => (e.target.src = '/default.jpg')}
-      alt={recipe.name}
-      className="w-full h-80 object-cover rounded-xl shadow-lg mb-8"
-    />
+      {/* Image */}
+      <img
+        src={recipe.image}
+        onError={(e) => (e.target.src = '/default.jpg')}
+        alt={recipe.name}
+        className="w-full h-80 object-cover rounded-xl shadow-lg mb-8"
+      />
 
     {/* Voice Section */}
     <div className="container bg-slate-400 text-black dark:text-white dark:bg-gray-500 mx-auto w-1/2 my-10 p-4 rounded-lg flex-col flex justify-center items-center">
@@ -233,16 +182,16 @@ const RecipeDetailPage = () => {
       </ol>
     </section>
 
-    {/* User Interaction: Likes and Comments */}
-    <div className="mt-10 flex items-center gap-4">
-      <button
-        onClick={handleLike}
-        className="flex items-center gap-2 px-4 py-2.5 bg-red-100 text-red-600 hover:text-white hover:bg-red-500 rounded-xl shadow w-fit transition-all duration-200 focus:outline-none"
-      >
-        {liked ? <FaHeart className="text-inherit" /> : <FaRegHeart className="text-inherit" />}
-        {liked ? 'Liked' : 'Like'}
-      </button>
-    </div>
+      {/* Likes Section */}
+      <div className="mt-10 flex items-center gap-4">
+        <button
+          onClick={handleLike}
+          className="flex items-center gap-2 px-4 py-2.5 bg-red-100 text-red-600 hover:text-white hover:bg-red-500 rounded-xl shadow w-fit transition-all duration-200 focus:outline-none"
+        >
+          {liked ? <FaHeart className="text-inherit" /> : <FaRegHeart className="text-inherit" />}
+          {liked ? 'Liked' : 'Like'}
+        </button>
+      </div>
 
     <div className="mt-12">
       <h3 className="text-2xl font-semibold mb-4 text-[#d35400]">Comments</h3>

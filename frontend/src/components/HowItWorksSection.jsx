@@ -84,6 +84,7 @@ const StepCard = ({ step, index, isActive, onHover }) => {
 };
 
 const HowItWorksSection = () => {
+  const navigate = useNavigate();
   const [activeStep, setActiveStep] = useState(-1);
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -96,7 +97,7 @@ const HowItWorksSection = () => {
 
   return (
     <section id="about" className="py-20 bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
-      {/* Animated Background Elements */}
+      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-32 left-16 w-64 h-64 bg-gradient-to-r from-red-200 to-pink-200 rounded-full blur-3xl opacity-20 animate-pulse" />
         <div className="absolute bottom-32 right-16 w-80 h-80 bg-gradient-to-r from-yellow-200 to-orange-200 rounded-full blur-3xl opacity-15 animate-bounce" style={{ animationDelay: '1s' }} />
@@ -110,7 +111,6 @@ const HowItWorksSection = () => {
             <div className="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-600 animate-pulse mr-3" />
             <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">How It Works</span>
           </div>
-          
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-800 dark:text-white mb-6">
             Get Cooking in{' '}
             <span className="relative">
@@ -120,7 +120,6 @@ const HowItWorksSection = () => {
               <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-yellow-500 to-green-500 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
             </span>
           </h2>
-          
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
             Join our vibrant community and start your culinary journey today. It's simple, fun, and completely free!
           </p>
@@ -129,23 +128,23 @@ const HowItWorksSection = () => {
         {/* Steps Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {steps.map((step, index) => (
-            <StepCard 
-              key={index} 
-              step={step} 
-              index={index}
-              isActive={activeStep === index || currentStep === index}
-              onHover={setActiveStep}
-            />
-          ))}
-        </div>
-
-        {/* Connecting Lines (Desktop) */}
-        <div className="hidden md:block absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl pointer-events-none">
-          <div className="relative">
-            <div className="absolute top-0 left-1/6 right-1/6 h-0.5 bg-gradient-to-r from-red-300 via-yellow-300 to-green-300 opacity-30" />
-            <div className="absolute top-0 left-1/6 w-8 h-0.5 bg-gradient-to-r from-red-500 to-yellow-500 animate-pulse" />
-            <div className="absolute top-0 right-1/6 w-8 h-0.5 bg-gradient-to-r from-yellow-500 to-green-500 animate-pulse" style={{ animationDelay: '1s' }} />
-          </div>
+  <StepCard 
+    key={index} 
+    step={step} 
+    index={index}
+    isActive={activeStep === index || currentStep === index}
+    onHover={setActiveStep}
+    onIconClick={
+      step.title === "Create an Account"
+        ? () => navigate('/register')
+        : step.title === "Add Your Recipes"
+        ? () => navigate('/recipes')
+        : step.title === "Explore & Interact"
+        ? () => navigate('/explore')
+        : undefined
+    }
+  />
+))}
         </div>
 
         {/* Bottom CTA */}
@@ -156,7 +155,7 @@ const HowItWorksSection = () => {
               <div className="text-sm text-gray-600 dark:text-gray-400">Join thousands of food lovers</div>
             </div>
             <a 
-              href="/register"
+              onClick={() => navigate('/register')}
               className="bg-gradient-to-r from-red-500 to-pink-600 text-white font-bold px-6 py-3 rounded-full hover:shadow-lg transform hover:scale-105 transition-all duration-300"
             >
               Get Started Free

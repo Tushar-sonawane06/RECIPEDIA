@@ -1,8 +1,14 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+
+import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import "./styles/animations.css";
 
+// Axios configuration
+import "./services/axiosConfig.js";
+import { authService } from "./services/authService.js";
+
 // Reusable and Core Page Imports with .jsx extension
+// Page Imports
 import RecipeListPage from "./pages/RecipeListPage.jsx";
 import RecipeDetailPage from "./pages/RecipeDetailPage.jsx";
 import RecipeHome from "./pages/RecipeHome.jsx";
@@ -11,21 +17,70 @@ import Register from "./pages/Register.jsx";
 import UserProfile from "./pages/UserProfile.jsx";
 import AddRecipe from "./pages/AddRecipe.jsx";
 import About from "./pages/About.jsx";
-import NotFound from './pages/NotFound.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
+import NotFound from "./pages/NotFound.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
+import Explore from "./pages/Explore.jsx";
 
 // Component Imports with .jsx extension
-import Header from "./components/Header.jsx";
+import Navbar from "./components/Header.jsx"; // Changed from Header to Navbar
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
+import ScrollReset from "./components/ScrollReset.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import TermsConditions from "./pages/TermsConditions.jsx";
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+// AppContent handles all routes and layout
+function AppContent() {
+  const location = useLocation();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Determine if current page is an auth page
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+
+  // Check authentication status on mount and route changes
   useEffect(() => {
-    const user = localStorage.getItem("username");
-    setIsLoggedIn(!!user);
-  }, []);
+    const checkAuth = () => {
+      const authStatus = authService.isAuthenticated();
+      setIsAuthenticated(authStatus);
+    };
+
+    checkAuth();
+    
+    // Listen for storage changes (in case user logs out in another tab)
+    const handleStorageChange = () => {
+      checkAuth();
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, [location.pathname]);
+
+  // Handle logout
+  const handleLogout = () => {
+    authService.clearAuth();
+    setIsAuthenticated(false);
+  };
+
+  // Handle successful login/register
+  const handleAuthSuccess = () => {
+    setIsAuthenticated(true);
+  };
+
+  // Add/remove body classes for auth pages
+  useEffect(() => {
+    if (isAuthPage) {
+      document.body.classList.add("auth-page");
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.classList.remove("auth-page");
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.classList.remove("auth-page");
+      document.body.style.overflow = "auto";
+    };
+  }, [isAuthPage]);
 
   return (
     <Router>
@@ -48,16 +103,25 @@ function App() {
           <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
           <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
-          {/* Dynamic Recipe Detail Page */}
-          {/* This one route handles ALL recipe details */}
-          <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
-          
-          {/* Error and Fallback Routes */}
-          <Route path="/error" element={<ErrorPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-      </div>
+        {/* Dynamic Recipe Detail Page */}
+        <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
+
+        {/* Error and Fallback Routes */}
+        <Route path="/error" element={<ErrorPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+
+      {/* Show Footer only if NOT on auth pages */}
+      {!isAuthPage && <Footer />}
+    </div>
+  );
+}
+
+// Main App Component
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

@@ -1,4 +1,3 @@
-// frontend/src/components/Footer.jsx
 import React from "react";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import "../styles/Footer.css";
@@ -6,19 +5,19 @@ import "../styles/Footer.css";
 const Footer = () => {
   return (
     <footer className="footer bg-gray-900 text-gray-300">
-      <div className="footer-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="footer-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
         {/* Logo & Mission */}
         <div className="footer-section about">
-          <h4>Recipedia</h4>
-          <p>
+          <h4 className="text-xl font-semibold text-amber-400 mb-3">Recipedia</h4>
+          <p className="text-sm leading-relaxed text-gray-400">
             Your go-to platform for sharing and discovering delicious recipes from around the world.
             Join our food-loving community!
           </p>
         </div>
 
         {/* Quick Links */}
-        <div className="footer-section mb-4 links">
-          <h4>Quick Links</h4>
+        <div className="footer-section links">
+          <h4 className="text-lg font-semibold text-amber-400 mb-3">Quick Links</h4>
           <ul>
 
             {/* <li><a href="/" className="hover:text-white transition-colors duration-300">Home</a></li> */}
@@ -27,31 +26,33 @@ const Footer = () => {
             <li><a href="/profile" className="hover:text-white transition-colors duration-300">Profile</a></li>
             <li><a href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</a></li>
             <li><a href="/terms-conditions" className="hover:text-white transition-colors duration-300">Terms</a></li>
+
           </ul>
         </div>
 
         {/* Categories */}
-        <div className="footer-section mb-4 links">
-          <h4>Categories</h4>
-          <ul>
-            <li><a href="/veg" className="transition-colors duration-300">Veg</a></li>
-            <li><a href="/nonveg" className="transition-colors duration-300">Non-Veg</a></li>
-            <li><a href="/dessert" className="transition-colors duration-300">Dessert</a></li>
-            <li><a href="/beverages" className="transition-colors duration-300">Beverages</a></li>
-          </ul>
+        <div className="footer-section links">
+          <h4 className="text-lg font-semibold text-amber-400 mb-3">Categories</h4>
+         <ul>
+  <li><a href="/veg" className="transition-colors duration-300">Veg</a></li>
+  <li><a href="/nonveg" className="transition-colors duration-300">Non-Veg</a></li>
+  <li><a href="/dessert" className="transition-colors duration-300">Dessert</a></li>
+  <li><a href="/beverages" className="transition-colors duration-300">Beverages</a></li>
+</ul>
         </div>
 
         {/* Contact Info */}
-        <div className="footer-section mb-4 links">
-          <h4>Contact Us</h4>
-          <p>
+        <div className="footer-section">
+          <h4 className="text-lg font-semibold text-amber-400 mb-3">Contact Us</h4>
+          <p className="text-sm text-gray-400">
             Email:{" "}
             <a href="mailto:support@recipedia.com" className="hover:text-red-500 transition-colors duration-300">
               support@recipedia.com
             </a>
           </p>
-          <p>Phone: +91-123-456-7890</p>
+          <p className="text-sm text-gray-400">Phone: +91-123-456-7890</p>
         </div>
+      </div>
 
         {/* Social Icons */}
         <div className="footer-section mb-6 links">
@@ -63,14 +64,13 @@ const Footer = () => {
             <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaLinkedinIn /></a>
           </div>
         </div>
-      </div>
 
       {/* Bottom Footer */}
-      <div className="footer-bottom mt-8 border-t border-gray-300 py-4 text-center text-sm text-gray-600">
-        <div className="footer-legal">
-          <a href="/privacy-policy">Privacy Policy</a>
-          <span> | </span>
-          <a href="/terms-of-use">Terms of Use</a>
+      <div className="footer-bottom mt-6 border-t border-gray-700 py-4 text-center text-sm text-gray-500">
+        <div className="footer-legal space-x-3 mb-2">
+          <a href="/privacy-policy" className="hover:underline">Privacy Policy</a>
+          <span>|</span>
+          <a href="/terms-of-use" className="hover:underline">Terms of Use</a>
         </div>
         <p>&copy; {new Date().getFullYear()} Recipedia. All rights reserved.</p>
       </div>

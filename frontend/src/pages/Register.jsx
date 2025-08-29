@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { Mail, Lock, Phone, MapPin, Calendar, ArrowRight, Eye, EyeOff, User, ChefHat, XCircle, Sparkles } from "lucide-react";
+import { Mail, Lock, Phone, MapPin, Calendar, ArrowRight, Eye, EyeOff, User, ChefHat, XCircle, Sparkles, ChevronLeft, House } from "lucide-react";
 
-const CustomFormInput = ({ icon: Icon, type = "text", name, value, onChange, placeholder, required, autoComplete, min, max, minLength, error, ...props }) => {
+const CustomFormInput = ({ icon: Icon, type = "text", name, value, onChange, onBlur, placeholder, required, autoComplete, min, max, minLength, error, ...props }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const handleBlur = (e) => {
+    setIsFocused(false);
+    if (onBlur) onBlur(e); // Call the passed onBlur handler
+  };
+
 
   return (
     <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="relative w-full">
@@ -22,7 +27,7 @@ const CustomFormInput = ({ icon: Icon, type = "text", name, value, onChange, pla
         value={value}
         onChange={onChange}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={handleBlur} 
         placeholder={placeholder}
         required={required}
         autoComplete={autoComplete}
@@ -93,125 +98,165 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [touchedFields, setTouchedFields] = useState({});
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+ const handleInputChange = (e) => {
+  const { name, value, type, checked } = e.target;
+  const newValue = type === "checkbox" ? checked : value;
+  
+  setFormData((prev) => ({ ...prev, [name]: newValue }));
 
-    // Clear specific field error when input changes
-    if (fieldErrors[name]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
-    }
+  // Mark field as touched
+  setTouchedFields(prev => ({ ...prev, [name]: true }));
+
+  // Validate field in real-time only if it has been touched
+  if (touchedFields[name] || newValue !== '') {
+    const error = validateField(name, newValue, { ...formData, [name]: newValue });
+    setFieldErrors((prev) => ({ 
+      ...prev, 
+      [name]: error 
+    }));
+  }
     // Clear general error if any input changes
-    if (generalError) setGeneralError("");
-  };
+  if (generalError) setGeneralError("");
+};
+const handleFieldBlur = (e) => {
+  const { name, value, type, checked } = e.target;
+  const fieldValue = type === "checkbox" ? checked : value;
+  
+  // Mark field as touched when user leaves the field
+  setTouchedFields(prev => ({ ...prev, [name]: true }));
+  
+  // Validate the field
+  const error = validateField(name, fieldValue, formData);
+  setFieldErrors(prev => ({ ...prev, [name]: error }));
+};
+  const validateAllFields = () => {
+  const { username, email, password, age, gender, phone, agreeTerms } = formData;
+  let errors = {};
 
+  errors.username = validateField('username', username, formData);
+  errors.email = validateField('email', email, formData);
+  errors.password = validateField('password', password, formData);
+  errors.age = validateField('age', age, formData);
+  errors.gender = validateField('gender', gender, formData);
+  errors.phone = validateField('phone', phone, formData);
+  errors.agreeTerms = validateField('agreeTerms', agreeTerms, formData);
+
+  // Remove empty errors
+  Object.keys(errors).forEach(key => {
+    if (!errors[key]) delete errors[key];
+  });
+
+  setFieldErrors(errors);
+  return Object.keys(errors).length === 0;
+};
   const togglePassword = () => setShowPassword((prev) => !prev);
 
-  const validateForm = () => {
-    const { username, email, password, age, gender, phone, agreeTerms } = formData;
-    let errors = {};
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    // Enhanced phone regex to accept common international formats, optional leading +
-    const phoneRegex = /^\+?(\d[\s-]?)?(\(?\d{3}\)?[\s-]?)?[\d\s-]{7,15}$/;
+const validateField = (name, value, formData) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\+?(\d[\s-]?)?(\(?\d{3}\)?[\s-]?)?[\d\s-]{7,15}$/;
 
-    if (!username.trim()) {
-      errors.username = "Username is required.";
-    } else if (username.trim().length < 3) {
-      errors.username = "Username must be at least 3 characters.";
-    } else if (username.trim().length > 30) {
-      errors.username = "Username cannot exceed 30 characters.";
-    }
+  switch (name) {
+    case 'username':
+      if (!value.trim()) return "Username is required.";
+      if (value.trim().length < 3) return "Username must be at least 3 characters.";
+      if (value.trim().length > 30) return "Username cannot exceed 30 characters.";
+      return "";
 
-    if (!email.trim()) {
-      errors.email = "Email is required.";
-    } else if (!emailRegex.test(email.trim())) {
-      errors.email = "Please enter a valid email address.";
-    }
+    case 'email':
+      if (!value.trim()) return "Email is required.";
+      if (!emailRegex.test(value.trim())) return "Please enter a valid email address.";
+      return "";
 
-    if (!password) {
-      errors.password = "Password is required.";
-    } else if (password.length < 8) {
-      errors.password = "Password must be at least 8 characters long.";
-    } else if (!/[A-Z]/.test(password)) {
-      errors.password = "Password needs at least one uppercase letter.";
-    } else if (!/[a-z]/.test(password)) {
-      errors.password = "Password needs at least one lowercase letter.";
-    } else if (!/[0-9]/.test(password)) {
-      errors.password = "Password needs at least one digit.";
-    } else if (!/[!@#$%^&*()]/.test(password)) {
-      errors.password = "Password needs at least one special character.";
-    }
+    case 'password':
+      if (!value) return "Password is required.";
+      if (value.length < 8) return "Password must be at least 8 characters long.";
+      if (!/[A-Z]/.test(value)) return "Password needs at least one uppercase letter.";
+      if (!/[a-z]/.test(value)) return "Password needs at least one lowercase letter.";
+      if (!/[0-9]/.test(value)) return "Password needs at least one digit.";
+      if (!/[!@#$%^&*()]/.test(value)) return "Password needs at least one special character.";
+      return "";
 
-    if (!age) {
-      errors.age = "Age is required.";
-    } else if (isNaN(parseInt(age)) || parseInt(age) < 1 || parseInt(age) > 120) {
-      errors.age = "Age must be between 1 and 120.";
-    }
+    case 'age':
+      if (!value) return "Age is required.";
+      if (isNaN(parseInt(value)) || parseInt(value) < 1 || parseInt(value) > 120) {
+        return "Age must be between 1 and 120.";
+      }
+      return "";
 
-    if (!gender) errors.gender = "Gender is required.";
+    case 'gender':
+      if (!value) return "Gender is required.";
+      return "";
 
-    if (phone.trim() && !phoneRegex.test(phone.trim())) {
-      errors.phone = "Please enter a valid phone number (e.g., +15551234567).";
-    }
+    case 'phone':
+      if (value.trim() && !phoneRegex.test(value.trim())) {
+        return "Please enter a valid phone number (e.g., +15551234567).";
+      }
+      return "";
 
-    if (!agreeTerms) errors.agreeTerms = "You must agree to the Terms & Privacy Policy.";
+    case 'agreeTerms':
+      if (!value) return "You must agree to the Terms & Privacy Policy.";
+      return "";
 
-    setFieldErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
+    default:
+      return "";
+  }
+};
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setGeneralError("");
-    setFieldErrors({});
+  setGeneralError("");
+  
+  // Mark all fields as touched
+  const allFields = ['username', 'email', 'password', 'age', 'gender', 'phone', 'agreeTerms'];
+  setTouchedFields(allFields.reduce((acc, field) => ({ ...acc, [field]: true }), {}));
 
-    if (!validateForm()) {
-      return;
-    }
+  if (!validateAllFields()) {
+    return;
+  }
 
-    setLoading(true);
+  setLoading(true);
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/register`,
-        {
-          username: formData.username.trim(),
-          email: formData.email.trim().toLowerCase(),
-          password: formData.password,
-          age: parseInt(formData.age),
-          gender: formData.gender,
-          phone: formData.phone.trim() || undefined, // Send undefined if empty
-          address: formData.address.trim() || undefined, // Send undefined if empty
-        }
-      );
-
-      if (response.status === 201) {
-        navigate("/login");
-      } else {
-        setGeneralError("Registration successful, but an unexpected status was returned.");
+  try {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_BASE_URL}/register`,
+      {
+        username: formData.username.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password,
+        age: parseInt(formData.age),
+        gender: formData.gender,
+        phone: formData.phone.trim() || undefined,
+        address: formData.address.trim() || undefined,
       }
-    } catch (err) {
-      console.error("Registration error:", err);
-      if (err.response) {
-        // Handle specific backend errors (e.g., email already exists)
-        if (err.response.status === 409 && err.response.data?.message?.includes("Email already registered")) {
-          setFieldErrors((prev) => ({ ...prev, email: "This email is already registered. Please login or use another email." }));
-        } else if (err.response.status === 409 && err.response.data?.message?.includes("Username already taken")) {
-          setFieldErrors((prev) => ({ ...prev, username: "This username is already taken. Please choose another one." }));
-        } else {
-          setGeneralError(err.response.data?.message || "Registration failed. Please try again.");
-        }
-      } else if (err.request) {
-        setGeneralError("Cannot connect to the server. Please check your internet connection and try again.");
-      } else {
-        setGeneralError("An unexpected error occurred. Please try again.");
-      }
-    } finally {
-      setLoading(false);
+    );
+
+    if (response.status === 201) {
+      navigate("/login");
+    } else {
+      setGeneralError("Registration successful, but an unexpected status was returned.");
     }
-  };
+  } catch (err) {
+    console.error("Registration error:", err);
+    if (err.response) {
+      if (err.response.status === 409 && err.response.data?.message?.includes("Email already registered")) {
+        setFieldErrors((prev) => ({ ...prev, email: "This email is already registered. Please login or use another email." }));
+      } else if (err.response.status === 409 && err.response.data?.message?.includes("Username already taken")) {
+        setFieldErrors((prev) => ({ ...prev, username: "This username is already taken. Please choose another one." }));
+      } else {
+        setGeneralError(err.response.data?.message || "Registration failed. Please try again.");
+      }
+    } else if (err.request) {
+      setGeneralError("Cannot connect to the server. Please check your internet connection and try again.");
+    } else {
+      setGeneralError("An unexpected error occurred. Please try again.");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const floatingVariants = {
     animate: (i) => ({
@@ -225,6 +270,10 @@ const Register = () => {
         delay: i * 2
       }
     })
+  };
+
+  const handleBack = () => {
+    navigate(-1);
   };
 
   return (
@@ -241,6 +290,38 @@ const Register = () => {
         zIndex: 9999
       }}
     >
+      {/* Back Button Container - Positioned at top-left */}
+      <div className="absolute top-4 left-4 z-50">
+        {/* Mobile Version: Only Home Icon (visible on mobile, hidden on desktop) */}
+        <motion.button
+          onClick={handleBack}
+          aria-label="Go home"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ type: 'spring', stiffness: 150, damping: 20, delay: 0.1 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex sm:hidden items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white shadow-lg shadow-red-500/40 hover:shadow-xl hover:shadow-red-500/50 transition-all duration-300 ease-in-out"
+        >
+          <House className="w-5 h-5" />
+        </motion.button>
+
+        {/* Desktop Version: Full Button with Back Arrow and Text (hidden on mobile, visible on desktop) */}
+        <motion.button
+          onClick={handleBack}
+          aria-label="Go back"
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ type: 'spring', stiffness: 150, damping: 20, delay: 0.1 }}
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.95 }}
+          className="hidden sm:flex group items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold text-base shadow-lg shadow-red-500/40 hover:shadow-xl hover:shadow-red-500/50 transition-all duration-300 ease-in-out"
+        >
+          <ChevronLeft className="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" />
+          <span>Back</span>
+        </motion.button>
+      </div>
+
       {/* Background Decorative Elements from AuthLayout */}
       <motion.div 
         className="absolute top-10 left-10 w-32 h-32 bg-gradient-to-r from-red-200/30 to-pink-200/30 rounded-full blur-3xl"
@@ -368,12 +449,12 @@ const Register = () => {
         <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-4">
           {/* Username */}
           <motion.div variants={childVariants}>
-            <CustomFormInput placeholder="Username" name="username" value={formData.username} onChange={handleInputChange} icon={User} required error={fieldErrors.username} />
+            <CustomFormInput placeholder="Username" name="username" value={formData.username} onChange={handleInputChange} onBlur={handleFieldBlur} icon={User} required error={fieldErrors.username} />
           </motion.div>
 
           {/* Email */}
           <motion.div variants={childVariants}>
-            <CustomFormInput placeholder="Email" type="email" name="email" value={formData.email} onChange={handleInputChange} icon={Mail} required error={fieldErrors.email} autoComplete="email" />
+            <CustomFormInput placeholder="Email" type="email" name="email" value={formData.email} onChange={handleInputChange} onBlur={handleFieldBlur} icon={Mail} required error={fieldErrors.email} autoComplete="email" />
           </motion.div>
 
           {/* Password */}
@@ -384,6 +465,7 @@ const Register = () => {
               placeholder="Password (min 8 chars, strong)"
               value={formData.password}
               onChange={handleInputChange}
+              onBlur={handleFieldBlur}
               minLength={8}
               required
               autoComplete="new-password"
@@ -414,7 +496,7 @@ const Register = () => {
           {/* Age and Gender */}
           <motion.div variants={childVariants} className="grid grid-cols-2 gap-3">
             {/* Age */}
-            <CustomFormInput placeholder="Age" type="number" name="age" value={formData.age} onChange={handleInputChange} icon={Calendar} min="1" max="120" required error={fieldErrors.age} />
+            <CustomFormInput placeholder="Age" type="number" name="age" value={formData.age} onChange={handleInputChange} onBlur={handleFieldBlur} icon={Calendar} min="1" max="120" required error={fieldErrors.age} />
 
             {/* Gender Select */}
             <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="relative w-full">
@@ -422,6 +504,7 @@ const Register = () => {
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
+                onBlur={handleFieldBlur}
                 required
                 className={`w-full border rounded-xl pl-3 pr-8 py-2 text-sm outline-none appearance-none transition-all duration-300 bg-white dark:bg-slate-900 cursor-pointer
                   ${fieldErrors.gender ? 'border-red-500 text-red-800 bg-red-50 dark:bg-red-900/30 dark:text-red-300' :
@@ -451,7 +534,7 @@ const Register = () => {
 
           {/* Phone */}
           <motion.div variants={childVariants}>
-            <CustomFormInput placeholder="Phone (Optional)" type="tel" name="phone" value={formData.phone} onChange={handleInputChange} icon={Phone} error={fieldErrors.phone} autoComplete="tel" />
+            <CustomFormInput placeholder="Phone (Optional)" type="tel" name="phone" value={formData.phone} onChange={handleInputChange} onBlur={handleFieldBlur} icon={Phone} error={fieldErrors.phone} autoComplete="tel" />
           </motion.div>
 
           {/* Address Textarea */}
@@ -462,6 +545,7 @@ const Register = () => {
               name="address"
               value={formData.address}
               onChange={handleInputChange}
+              onBlur={handleFieldBlur}
               className={`w-full border rounded-xl pl-10 pr-4 py-2 text-sm outline-none resize-none transition-all duration-300
                 ${fieldErrors.address
                   ? 'border-red-500 focus:border-red-500 text-red-800 placeholder-red-300 bg-red-50 dark:bg-red-900/30 dark:text-red-300 dark:placeholder-red-500'
@@ -488,7 +572,8 @@ const Register = () => {
                 name="agreeTerms"
                 checked={formData.agreeTerms}
                 onChange={handleInputChange}
-                className={`mr-2 w-4 h-4 mt-0.5 rounded accent-red-500 cursor-pointer transition-colors duration-200 ${fieldErrors.agreeTerms ? 'border-red-500' : 'border-gray-300 dark:border-slate-600'}`}
+                onBlur={handleFieldBlur}
+                className={`mr-2 w-4 h-4 mt-0.5 rounded accent-red-500 cursor-pointer ${fieldErrors.agreeTerms ? 'border-red-500' : 'border-gray-300'}`}
               />
               <label htmlFor="agreeTerms" className="text-gray-700 dark:text-gray-300 cursor-pointer leading-tight">
                 I agree to the{" "}

@@ -111,44 +111,76 @@ const [value, setValue] = React.useState(3);
         className="w-full h-80 object-cover rounded-xl shadow-lg mb-8"
       />
 
-      {/* Enhanced Audio Section */}
-      <AudioOverview
-        contentPartsRef={contentPartsRef}
-        speechRate={speechRate}
-        setSpeechRate={setSpeechRate}
-        spokenChars={spokenChars}
-        setSpokenChars={setSpokenChars}
-        speechIndex={speechIndex}
-        setSpeechIndex={setSpeechIndex}
-        isSpeaking={isSpeaking}
-        setIsSpeaking={setIsSpeaking}
+    {/* Voice Section */}
+    <div className="container bg-slate-400 text-black dark:text-white dark:bg-gray-500 mx-auto w-1/2 my-10 p-4 rounded-lg flex-col flex justify-center items-center">
+      <div className="flex items-center justify-center w-full">
+        <p className="text-[10px] sm:text-[15px] md:text-2xl font-bold mr-7">Audio Overview</p>
+        <div onClick={handleSpeed} className="text-xl md:text-4xl cursor-pointer hover:scale-105">
+          <IoMdSettings />
+        </div>
+      </div>
+      <div className="flex justify-center sm:justify-around">
+        <button onClick={handleSkipBack} className="text-2xl sm:text-4xl hover:scale-105">
+          <IoPlaySkipBackSharp />
+        </button>
+        <button
+          onClick={isSpeaking ? handlePause : handlePlay}
+          className="text-2xl sm:text-4xl hover:scale-105"
+        >
+          {isSpeaking ? <IoMdPause /> : <FaPlay />}
+        </button>
+        <button onClick={handleSkipForward} className="text-2xl sm:text-4xl hover:scale-105">
+          <IoPlaySkipForwardSharp />
+        </button>
+      </div>
+      <input
+        type="range"
+        min={0}
+        step={1}
+        max={contentPartsRef.current.reduce((a, b) => a + b.length, 0)}
+        value={spokenChars}
+        onChange={(e) => {
+          setIsDragging(true);
+          handleSeek(e);
+        }}
+        onMouseUp={handleSeekRelease}
+        onTouchEnd={handleSeekRelease}
+        className="w-full"
       />
+      <div id="speed" className="hidden flex flex-col sm:flex-row w-full md:gap-2">
+        <label htmlFor="rate" className="text-xl sm:text-2xl font-medium ml-1">
+          Speed:
+        </label>
+        <input
+          id="rate"
+          type="range"
+          min="0.25"
+          max="3"
+          step="0.1"
+          value={speechRate}
+          onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+          className="accent-pink-600 w-full"
+        />
+        <span className="text-xl">{speechRate}x</span>
+      </div>
+    </div>
 
-      {/* About Section */}
-      <section className="prose max-w-none dark:prose-invert">
-        <h2 className="text-2xl font-semibold text-[#d35400] pb-2">
-          About this Recipe
-        </h2>
-        <p className="dark:text-white text-red-500">{recipe.about}</p>
-
-        <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">
-          Ingredients
-        </h2>
-        <ul className="list-disc dark:text-white pl-6 marker:text-red-500 text-red-500">
-          {recipe.ingredients.map((item, i) => (
-            <li key={i}>{item}</li>
-          ))}
-        </ul>
-
-        <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">
-          Preparation Steps
-        </h2>
-        <ol className="list-decimal pl-6 space-y-2 dark:text-white text-red-500">
-          {recipe.preparationSteps.map((step, i) => (
-            <li key={i}>{step}</li>
-          ))}
-        </ol>
-      </section>
+    <section className="prose max-w-none dark:prose-invert">
+      <h2 className="text-2xl font-semibold text-[#d35400] pb-2">About this Recipe</h2>
+      <p className='text-gray-700 dark:text-white'>{recipe.about}</p>
+      <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">Ingredients</h2> 
+      <ul className="list-disc pl-6 marker:text-red-500 text-gray-700 dark:text-white">
+        {recipe.ingredients.map((item, i) => (
+          <li key={i}>{item}</li>
+        ))}
+      </ul>
+      <h2 className="text-2xl font-semibold mt-6 text-[#d35400] pb-2">Preparation Steps</h2>
+      <ol className="list-decimal pl-6 space-y-2 text-gray-700 dark:text-white">
+        {recipe.preparationSteps.map((step, i) => (
+          <li key={i}>{step}</li>
+        ))}
+      </ol>
+    </section>
 
       {/* Likes Section */}
       <div className="mt-10 flex items-center gap-4">
@@ -161,52 +193,40 @@ const [value, setValue] = React.useState(3);
         </button>
       </div>
 
-      {/* Comments Section */}
-      <div className="mt-12">
-        <h3 className="text-2xl font-semibold mb-4 text-[#d35400]">Comments</h3>
-        <form onSubmit={handleComment}>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
-            className="w-full border rounded-lg p-4 min-h-[120px] text-black bg-white dark:bg-slate-700 dark:text-white"
-          />
-           <Box sx={{ '& > legend': { mt: 2 } }}>
-      <Typography component="legend" className='!text-2xl dark:!text-white !text-red-500'>Rating:</Typography>
-      <Rating
-        name="simple-controlled"
-        value={value}
-          sx={{ fontSize: 40 }}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-      />
-    </Box>
-          {error && <p className="text-red-600 mt-2 font-semibold">{error}</p>}
-          <button
-            type="submit"
-            className="mt-3 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-semibold"
-          >
-            Post Comment
-          </button>
-        </form>
-        <div className="space-y-4 mt-6">
-          {comments.length > 0 ? (
-            comments.map((c) => (
-              <div key={c.id} className="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg shadow">
-                <strong>{c.user}</strong>
-                <p>{c.text}</p>
-              </div>
-            ))
-          ) : (
-            <div className="bg-gray-100 dark:bg-slate-700 p-4 rounded-lg shadow text-center text-gray-500 dark:text-white">
-              No comments yet. Be the first to share your thoughts!
-            </div>
-          )}
+    <div className="mt-12">
+      <h3 className="text-2xl font-semibold mb-4 text-[#d35400]">Comments</h3>
+      <form onSubmit={handleComment}>
+        <textarea
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Add a comment..."
+          className="w-full border rounded-lg p-4 min-h-[120px] text-black bg-white dark:bg-slate-700 dark:text-white"
+        />
+        {error && <p className="text-red-600 mt-2 font-semibold">{error}</p>}
+        <button
+          type="submit"
+          className="mt-3 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-full font-semibold"
+        >
+          Post Comment
+        </button>
+      </form>
+      <div className="space-y-4 mt-6">
+        {comments.length > 0 ? (
+          comments.map((c) => (
+                    <div key={c.id} className="bg-gray-50 dark:bg-slate-700 p-4 rounded-lg shadow">
+          <strong className="text-gray-800 dark:text-white">{c.user}</strong>
+          <p className="text-gray-700 dark:text-gray-300">{c.text}</p>
         </div>
+          ))
+        ) : (
+          <div className="bg-gray-100 dark:bg-slate-700 p-4 rounded-lg shadow text-center text-gray-600 dark:text-gray-300">
+            No comments yet. Be the first to share your thoughts!
+          </div>
+        )}
       </div>
     </div>
-  );
+  </div>
+);
 };
 
 export default RecipeDetailPage;

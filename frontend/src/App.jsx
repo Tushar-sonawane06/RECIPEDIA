@@ -83,46 +83,25 @@ function AppContent() {
   }, [isAuthPage]);
 
   return (
-    <div className="app-container">
-      <ScrollToTop />
-      
-      {/* Only show Navbar if NOT on auth pages */}
-      {!isAuthPage && (
-        <Navbar 
-          isAuthenticated={isAuthenticated} 
-          onLogout={handleLogout}
-        />
-      )}
-      
-      <Routes>
-        {/* Core Routes */}
-        <Route path="/" element={<RecipeHome />} />
-        <Route path="/home" element={<RecipeHome />} />
-        
-        {/* Auth Routes - Clean without wrapper divs */}
-        <Route 
-          path="/login" 
-          element={<Login onAuthSuccess={handleAuthSuccess} />} 
-        />
-        <Route 
-          path="/register" 
-          element={<Register onAuthSuccess={handleAuthSuccess} />} 
-        />
-        
-        {/* Protected/User Routes */}
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
-        <Route path="/add-recipe" element={<AddRecipe />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-        <Route path="/terms-conditions" element={<TermsConditions />} />
-
-        {/* Category Pages */}
-        <Route path="/veg" element={<RecipeListPage category="veg" />} />
-        <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
-        <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
-        <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
+    <Router>
+      <div className="app-container min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
+        <ScrollToTop />
+        <Header />
+        <Routes>
+          {/* Core Routes */}
+          <Route path="/" element={<RecipeHome />} />
+          <Route path="/home" element={<RecipeHome />} />
+          <Route path="/login" element={<div className="login-bg"><Login setIsLoggedIn={setIsLoggedIn} /></div>} />
+          <Route path="/register" element={<div className="register-bg"><Register setIsLoggedIn={setIsLoggedIn} /></div>} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/add-recipe" element={<AddRecipe />} />
+          <Route path="/about" element={<About />} />
+          
+          {/* Dynamic Category List Pages */}
+          <Route path="/veg" element={<RecipeListPage category="veg" />} />
+          <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
+          <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
+          <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
         {/* Dynamic Recipe Detail Page */}
         <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />

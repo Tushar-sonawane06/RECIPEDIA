@@ -157,7 +157,7 @@ const ExplorePage = () => {
         .map((r) => ({
           title: r.name,
           description: r.about,
-          imageUrl: r.image, // ensure RecipeCard uses this
+          imageUrl: r.image,
           category: r.category,
           slug: r.id,
         }));

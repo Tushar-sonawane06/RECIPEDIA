@@ -1,5 +1,5 @@
 // Explore.jsx
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi"; // FiArrowRight is now in Card.jsx
@@ -94,7 +94,16 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
 // --- Main Page Component ---
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState("");
   const navigate = useNavigate();
+
+  useEffect(()=>{
+         const timer = setTimeout(()=>{
+          setDebounceSearch(searchQuery)
+          console.log('hi', searchQuery)
+         },500);
+         return () => clearTimeout(timer)
+  },[searchQuery])
 
   const sectionConfigs = useMemo(() => {
     const mapRecipes = (category) =>
@@ -166,7 +175,7 @@ const ExplorePage = () => {
             <RecipeSection
               key={config.title}
               config={config}
-              searchQuery={searchQuery}
+              searchQuery={debounceSearch}
               navigate={navigate}
             />
           ))}

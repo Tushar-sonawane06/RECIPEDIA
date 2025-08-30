@@ -58,7 +58,7 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
     const container = scrollContainerRef.current;
     if (!container) return;
     const maxScrollLeft = container.scrollWidth - container.offsetWidth;
-    const threshold = 2; // small buffer
+    const threshold = 5; // small buffer
     setCanScrollLeft(container.scrollLeft > threshold);
     setCanScrollRight(container.scrollLeft < maxScrollLeft - threshold);
   };

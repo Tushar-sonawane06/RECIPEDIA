@@ -24,7 +24,6 @@ const itemVariants = { // Keep itemVariants here if other components like NoResu
 };
 
 // --- Reusable Components (NoResults is still specific to ExplorePage for now) ---
-
 const NoResults = () => (
   <motion.div
     initial={{ opacity: 0, scale: 0.9 }}
@@ -43,12 +42,45 @@ const NoResults = () => (
 
 const RecipeSection = ({ config, searchQuery, navigate }) => {
   const sectionRef = useRef(null);
+  const scrollContainerRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
   const filteredData = useMemo(() =>
     config.data.filter((recipe) =>
       recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
     ), [config.data, searchQuery]);
+
+  // --- Scroll buttons state ---
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollButtons = () => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const maxScrollLeft = container.scrollWidth - container.offsetWidth;
+    const threshold = 2; // small buffer
+    setCanScrollLeft(container.scrollLeft > threshold);
+    setCanScrollRight(container.scrollLeft < maxScrollLeft - threshold);
+  };
+
+  const scrollLeft = () => {
+    const container = scrollContainerRef.current;
+    container.scrollBy({ left: -300, behavior: "smooth" });
+  };
+
+  const scrollRight = () => {
+    const container = scrollContainerRef.current;
+    container.scrollBy({ left: 300, behavior: "smooth" });
+  };
+
+  React.useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const handleScroll = () => requestAnimationFrame(updateScrollButtons);
+    container.addEventListener("scroll", handleScroll);
+    updateScrollButtons(); // initial check
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [filteredData]);
 
   return (
     <motion.section
@@ -65,7 +97,19 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
       </motion.div>
 
       <div className="relative">
+        {/* --- Left Scroll Button --- */}
+        {canScrollLeft && (
+          <button
+            onClick={scrollLeft}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-md transition-all"
+          >
+            &#8249;
+          </button>
+        )}
+
+        {/* --- Recipe Cards Scroll Container --- */}
         <div
+          ref={scrollContainerRef}
           className={`flex overflow-x-auto space-x-6 py-4 px-1 snap-x snap-mandatory scrollbar-base ${config.scrollbar}`}
         >
           <AnimatePresence>
@@ -82,9 +126,19 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
               !isInView && <div/> // Prevents NoResults from showing before section is in view
             )}
           </AnimatePresence>
-          {/* Add a spacer at the end for better scrolling UX */}
-          <div className="flex-shrink-0 w-1 h-1" />
+          <div className="flex-shrink-0 w-1 h-1" /> {/* Spacer */}
         </div>
+
+        {/* --- Right Scroll Button --- */}
+        {canScrollRight && (
+          <button
+            onClick={scrollRight}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full flex items-center justify-center shadow-md transition-all"
+          >
+            &#8250;
+          </button>
+        )}
+
         {filteredData.length === 0 && isInView && <NoResults />}
       </div>
     </motion.section>
@@ -103,7 +157,7 @@ const ExplorePage = () => {
         .map((r) => ({
           title: r.name,
           description: r.about,
-          imageUrl: r.image,
+          imageUrl: r.image, // ensure RecipeCard uses this
           category: r.category,
           slug: r.id,
         }));

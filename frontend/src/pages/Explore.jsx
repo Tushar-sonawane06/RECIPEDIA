@@ -100,19 +100,18 @@ const ExplorePage = () => {
   useEffect(()=>{
          const timer = setTimeout(()=>{
           setDebounceSearch(searchQuery)
-          console.log('hi', searchQuery)
          },500);
          return () => clearTimeout(timer)
   },[searchQuery])
 
-  const sectionConfigs = useMemo(() => {
+  const sectionConfigs = useMemo(() => { 
     const mapRecipes = (category) =>
       recipes
         .filter((r) => r.category === category)
         .map((r) => ({
           title: r.name,
           description: r.about,
-          imageUrl: r.image,
+          images: r.images,
           category: r.category,
           slug: r.id,
         }));

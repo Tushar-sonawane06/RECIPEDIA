@@ -26,6 +26,8 @@ import Navbar from "./components/Header.jsx"; // Changed from Header to Navbar
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
+import CircularProgress from "@mui/material/CircularProgress";
+import ErrorBoundary from "./ErrorBoundary.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
@@ -93,47 +95,47 @@ function AppContent() {
           onLogout={handleLogout}
         />
       )}
+      <ErrorBoundary>
+        <Suspense fallback={<div><CircularProgress /></div>}>
+          <Routes>
+            {/* Core Routes */}
+            <Route path="/" element={<RecipeHome />} />
+            <Route path="/home" element={<RecipeHome />} />
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          {/* Core Routes */}
-          <Route path="/" element={<RecipeHome />} />
-          <Route path="/home" element={<RecipeHome />} />
+            {/* Auth Routes - Clean without wrapper divs */}
+            <Route
+              path="/login"
+              element={<Login onAuthSuccess={handleAuthSuccess} />}
+            />
+            <Route
+              path="/register"
+              element={<Register onAuthSuccess={handleAuthSuccess} />}
+            />
 
-          {/* Auth Routes - Clean without wrapper divs */}
-          <Route
-            path="/login"
-            element={<Login onAuthSuccess={handleAuthSuccess} />}
-          />
-          <Route
-            path="/register"
-            element={<Register onAuthSuccess={handleAuthSuccess} />}
-          />
+            {/* Protected/User Routes */}
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
+            <Route path="/add-recipe" element={<AddRecipe />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
 
-          {/* Protected/User Routes */}
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
-          <Route path="/add-recipe" element={<AddRecipe />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermsConditions />} />
+            {/* Category Pages */}
+            <Route path="/veg" element={<RecipeListPage category="veg" />} />
+            <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
+            <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
+            <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
-          {/* Category Pages */}
-          <Route path="/veg" element={<RecipeListPage category="veg" />} />
-          <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
-          <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
-          <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
+            {/* Dynamic Recipe Detail Page */}
+            <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
 
-          {/* Dynamic Recipe Detail Page */}
-          <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
-
-          {/* Error and Fallback Routes */}
-          <Route path="/error" element={<ErrorPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Suspense>
-
+            {/* Error and Fallback Routes */}
+            <Route path="/error" element={<ErrorPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
       {/* Show Footer only if NOT on auth pages */}
       {!isAuthPage && <Footer />}
     </div>

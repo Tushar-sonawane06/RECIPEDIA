@@ -6,6 +6,9 @@ import { FiSearch, FiArrowRight, FiClock, FiStar } from "react-icons/fi";
 import { GiKnifeFork, GiRoastChicken, GiCakeSlice, GiMartini } from "react-icons/gi";
 import { HiSparkles } from "react-icons/hi"; // ✨ NEW: Added sparkles icon
 import recipes from "../data/recipes.json"; // Adjust path as necessary
+import RecipeCard from "../components/RecipeCard"
+
+
 
 // --- Animation Variants ---
 const containerVariants = {
@@ -19,6 +22,33 @@ const containerVariants = {
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+// ✨ NEW: Added floating animation variants
+const floatingVariants = {
+  initial: { y: 0 },
+  animate: { 
+    y: [-10, 10, -10],
+    transition: {
+      duration: 4,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+// ✨ NEW: Added sparkle animation variants
+const sparkleVariants = {
+  initial: { scale: 0, rotate: 0 },
+  animate: { 
+    scale: [0, 1, 0],
+    rotate: [0, 180, 360],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
 };
 
 // --- Reusable Components (NoResults is still specific to ExplorePage for now) ---

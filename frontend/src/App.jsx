@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
 import "./styles/animations.css";
@@ -7,7 +6,6 @@ import "./styles/animations.css";
 import "./services/axiosConfig.js";
 import { authService } from "./services/authService.js";
 
-// Reusable and Core Page Imports with .jsx extension
 // Page Imports
 const RecipeListPage = lazy(() => import("./pages/RecipeListPage.jsx"))
 const RecipeDetailPage = lazy(() => import("./pages/RecipeDetailPage.jsx"))
@@ -21,8 +19,8 @@ const NotFound = lazy(() => import("./pages/NotFound.jsx"))
 const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
 const Explore = lazy(() => import("./pages/Explore.jsx"))
 
-// Component Imports with .jsx extension
-import Navbar from "./components/Header.jsx"; // Changed from Header to Navbar
+// Components
+import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
@@ -31,7 +29,7 @@ import ErrorBoundary from "./ErrorBoundary.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
-// AppContent handles all routes and layout
+// AppContent handles all routes and layout (must be rendered INSIDE a Router)
 function AppContent() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,8 +51,8 @@ function AppContent() {
       checkAuth();
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [location.pathname]);
 
   // Handle logout
@@ -85,16 +83,18 @@ function AppContent() {
   }, [isAuthPage]);
 
   return (
-    <div className="app-container">
+    <div className="app-container min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
       <ScrollToTop />
 
       {/* Only show Navbar if NOT on auth pages */}
-      {!isAuthPage && (
-        <Navbar
-          isAuthenticated={isAuthenticated}
-          onLogout={handleLogout}
-        />
-      )}
+      {
+        !isAuthPage && (
+          <Navbar
+            isAuthenticated={isAuthenticated}
+            onLogout={handleLogout}
+          />
+        )
+      }
       <ErrorBoundary>
         <Suspense fallback={<div><CircularProgress /></div>}>
           <Routes>
@@ -105,12 +105,26 @@ function AppContent() {
             {/* Auth Routes - Clean without wrapper divs */}
             <Route
               path="/login"
-              element={<Login onAuthSuccess={handleAuthSuccess} />}
+              element={
+                <div className="login-bg">
+                  <Login onAuthSuccess={handleAuthSuccess} />
+                </div>
+              }
             />
             <Route
               path="/register"
-              element={<Register onAuthSuccess={handleAuthSuccess} />}
+              element={
+                <div className="register-bg">
+                  <Register onAuthSuccess={handleAuthSuccess} />
+                </div>
+              }
             />
+
+            {/* Dynamic Category List Pages */}
+            <Route path="/veg" element={<RecipeListPage category="veg" />} />
+            <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
+            <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
+            <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
             {/* Protected/User Routes */}
             <Route path="/profile" element={<UserProfile />} />
@@ -127,22 +141,21 @@ function AppContent() {
             <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
             <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
-            {/* Dynamic Recipe Detail Page */}
-            <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
-
             {/* Error and Fallback Routes */}
             <Route path="/error" element={<ErrorPage />} />
             <Route path="*" element={<NotFound />} />
+             <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
           </Routes>
-        </Suspense>
-      </ErrorBoundary>
-      {/* Show Footer only if NOT on auth pages */}
-      {!isAuthPage && <Footer />}
-    </div>
+
+      </Suspense>
+    </ErrorBoundary >
+    {/* Show Footer only if NOT on auth pages */ }
+  { !isAuthPage && <Footer /> }
+    </div >
   );
 }
 
-// Main App Component
+// Main App Component: provide the Router here (single source of truth)
 function App() {
   return (
     <Router>

@@ -10,7 +10,7 @@ import allRecipes from '../data/recipes.json';
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
-    opacity: 1,
+    opacity: 1, 
     transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
 };
@@ -147,7 +147,7 @@ const RecipeListPage = ({ category }) => {
                   recipe={{
                     title: recipe.name,
                     description: recipe.about,
-                    imageUrl: recipe.image,
+                    images: recipe.images,
                     category: recipe.category,
                     slug: recipe.id,
                   }}

@@ -134,10 +134,12 @@ const HeroSection = () => {
                 : "opacity-0 scale-110"
             }`}
           >
-            <div
-              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: `url(${slide.image})` }}
+            <img
+              src={slide.image}
+              alt={`${slide.title} ${slide.subtitle}`}
+              className="absolute inset-0 w-full h-full object-cover"
             />
+
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
             <div
               className={`absolute inset-0 bg-gradient-to-br ${slide.accent} opacity-20`}

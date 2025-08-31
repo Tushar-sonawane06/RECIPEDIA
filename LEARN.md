@@ -74,7 +74,7 @@ We welcome contributors of all experience levels!
 4. **Make your changes**, commit & push:
    `git commit -m "Add: your message"`
    `git push origin feature-name`
-5. **Open a Pull Request**
+5. **Open a Pull Request**git 
 
 **🐛 Good First Issues**
 

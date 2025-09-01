@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import { useState, useEffect, lazy, Suspense } from "react";
 import "./styles/animations.css";
@@ -7,7 +6,6 @@ import "./styles/animations.css";
 import "./services/axiosConfig.js";
 import { authService } from "./services/authService.js";
 
-// Reusable and Core Page Imports with .jsx extension
 // Page Imports
 const RecipeListPage = lazy(() => import("./pages/RecipeListPage.jsx"))
 const RecipeDetailPage = lazy(() => import("./pages/RecipeDetailPage.jsx"))
@@ -21,15 +19,15 @@ const NotFound = lazy(() => import("./pages/NotFound.jsx"))
 const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
 const Explore = lazy(() => import("./pages/Explore.jsx"))
 
-// Component Imports with .jsx extension
-import Navbar from "./components/Header.jsx"; // Changed from Header to Navbar
+// Components
+import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
-// AppContent handles all routes and layout
+// AppContent handles all routes and layout (must be rendered INSIDE a Router)
 function AppContent() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -51,8 +49,8 @@ function AppContent() {
       checkAuth();
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [location.pathname]);
 
   // Handle logout
@@ -83,7 +81,7 @@ function AppContent() {
   }, [isAuthPage]);
 
   return (
-    <div className="app-container">
+    <div className="app-container min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
       <ScrollToTop />
 
       {/* Only show Navbar if NOT on auth pages */}
@@ -99,17 +97,24 @@ function AppContent() {
           {/* Core Routes */}
           <Route path="/" element={<RecipeHome />} />
           <Route path="/home" element={<RecipeHome />} />
-
-          {/* Auth Routes - Clean without wrapper divs */}
-          <Route
-            path="/login"
-            element={<Login onAuthSuccess={handleAuthSuccess} />}
-          />
-          <Route
-            path="/register"
-            element={<Register onAuthSuccess={handleAuthSuccess} />}
-          />
-
+         {/* Auth Routes - Clean without wrapper divs */}
+        <Route
+          path="/login"
+          element={
+            <div className="login-bg">
+              <Login onAuthSuccess={handleAuthSuccess} />
+            </div>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <div className="register-bg">
+              <Register onAuthSuccess={handleAuthSuccess} />
+            </div>
+          }
+        />
+          
           {/* Protected/User Routes */}
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
@@ -140,7 +145,7 @@ function AppContent() {
   );
 }
 
-// Main App Component
+// Main App Component: provide the Router here (single source of truth)
 function App() {
   return (
     <Router>

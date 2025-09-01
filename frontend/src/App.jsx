@@ -24,6 +24,7 @@ import Navbar from "./components/Header.jsx"; // header component is named Navba
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
@@ -116,9 +117,9 @@ function AppContent() {
         />
           
           {/* Protected/User Routes */}
-          <Route path="/profile" element={<UserProfile />} />
-          <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
-          <Route path="/add-recipe" element={<AddRecipe />} />
+          <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+          <Route path="/settings" element={<PrivateRoute><UserProfile /></PrivateRoute>} /> {/* You can create a separate Settings component */}
+          <Route path="/add-recipe" element={<PrivateRoute><AddRecipe /></PrivateRoute>} />
           <Route path="/about" element={<About />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />

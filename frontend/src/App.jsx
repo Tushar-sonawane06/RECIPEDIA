@@ -97,7 +97,6 @@ function AppContent() {
         <Routes>
           {/* Core Routes */}
           <Route path="/" element={<RecipeHome />} />
-          <Route path="/home" element={<RecipeHome />} />
          {/* Auth Routes - Clean without wrapper divs */}
         <Route
           path="/login"

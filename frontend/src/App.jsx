@@ -24,8 +24,8 @@ import Navbar from "./components/Header.jsx"; // header component is named Navba
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
-import CircularProgress from "@mui/material/CircularProgress";
 import ErrorBoundary from "./ErrorBoundary.jsx";
+import CustomizedProgressBars from "./components/Loader.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
@@ -96,7 +96,7 @@ function AppContent() {
         )
       }
       <ErrorBoundary>
-        <Suspense fallback={<div><CircularProgress /></div>}>
+        <Suspense fallback={<div><CustomizedProgressBars/></div>}>
           <Routes>
             {/* Core Routes */}
             <Route path="/" element={<RecipeHome />} />

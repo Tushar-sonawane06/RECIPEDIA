@@ -20,12 +20,13 @@ const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
 const Explore = lazy(() => import("./pages/Explore.jsx"));
 import * as Sentry from "@sentry/react";
 
-
 // Components
 import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
 import CustomizedProgressBars from "./components/Loader.jsx";
+import ScrollReset from "./components/ScrollReset.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
 
@@ -148,6 +149,7 @@ function AppContent() {
     {/* Show Footer only if NOT on auth pages */ }
   { !isAuthPage && <Footer /> }
     </div >
+
   );
 }
 

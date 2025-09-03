@@ -17,14 +17,14 @@ const AddRecipe = lazy(() => import("./pages/AddRecipe.jsx"))
 const About = lazy(() => import("./pages/About.jsx"))
 const NotFound = lazy(() => import("./pages/NotFound.jsx"))
 const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
-const Explore = lazy(() => import("./pages/Explore.jsx"))
+const Explore = lazy(() => import("./pages/Explore.jsx"));
+import * as Sentry from "@sentry/react";
+
 
 // Components
 import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
-import ScrollReset from "./components/ScrollReset.jsx";
-import ErrorBoundary from "./ErrorBoundary.jsx";
 import CustomizedProgressBars from "./components/Loader.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
@@ -95,7 +95,9 @@ function AppContent() {
           />
         )
       }
-      <ErrorBoundary>
+      <Sentry.ErrorBoundary fallback={({error, resetError})=>(
+        <ErrorPage error={error} resetError={resetError}/>
+      )}>
         <Suspense fallback={<div><CustomizedProgressBars/></div>}>
           <Routes>
             {/* Core Routes */}
@@ -120,12 +122,6 @@ function AppContent() {
               }
             />
 
-            {/* Dynamic Category List Pages */}
-            <Route path="/veg" element={<RecipeListPage category="veg" />} />
-            <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
-            <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
-            <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
-
             {/* Protected/User Routes */}
             <Route path="/profile" element={<UserProfile />} />
             <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
@@ -148,7 +144,7 @@ function AppContent() {
           </Routes>
 
       </Suspense>
-    </ErrorBoundary >
+    </Sentry.ErrorBoundary >
     {/* Show Footer only if NOT on auth pages */ }
   { !isAuthPage && <Footer /> }
     </div >

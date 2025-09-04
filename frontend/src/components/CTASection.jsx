@@ -1,35 +1,35 @@
-<<<<<<< Updated upstream
+// src/components/CategoriesSection.jsx
 import React, { useState } from 'react';
 import { ArrowRight, Sparkles, TrendingUp } from 'lucide-react';
 
 const categories = [
-  { 
-    name: 'Vegetarian', 
-    image: '/veg.jpg', 
+  {
+    name: 'Vegetarian',
+    image: '/veg.jpg',
     href: '/veg',
     gradient: 'from-green-500 to-emerald-600',
     recipes: '2.5K+',
     description: 'Fresh & healthy plant-based delights'
   },
-  { 
-    name: 'Non-Vegetarian', 
-    image: '/nonveg.jpg', 
+  {
+    name: 'Non-Vegetarian',
+    image: '/nonveg.jpg',
     href: '/nonveg',
     gradient: 'from-red-500 to-rose-600',
     recipes: '3.2K+',
     description: 'Rich protein-packed culinary adventures'
   },
-  { 
-    name: 'Desserts', 
-    image: '/dessert.jpg', 
+  {
+    name: 'Desserts',
+    image: '/dessert.jpg',
     href: '/dessert',
     gradient: 'from-pink-500 to-purple-600',
     recipes: '1.8K+',
     description: 'Sweet indulgences for every occasion'
   },
-  { 
-    name: 'Beverages', 
-    image: '/beverages.jpg', 
+  {
+    name: 'Beverages',
+    image: '/beverages.jpg',
     href: '/beverages',
     gradient: 'from-blue-500 to-cyan-600',
     recipes: '900+',
@@ -41,7 +41,7 @@ const CategoryCard = ({ category, index }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div 
+    <div
       className="group relative overflow-hidden rounded-2xl bg-white dark:bg-slate-800 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-500"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -49,10 +49,10 @@ const CategoryCard = ({ category, index }) => {
     >
       {/* Background Image with Overlay */}
       <div className="relative h-48 overflow-hidden">
-        <img 
-          src={category.image} 
-          alt={category.name} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+        <img
+          src={category.image}
+          alt={category.name}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
         />
         <div className={`absolute inset-0 bg-gradient-to-t ${category.gradient} opacity-60 group-hover:opacity-40 transition-opacity duration-500`} />
 
@@ -89,7 +89,7 @@ const CategoryCard = ({ category, index }) => {
             </div>
           </div>
 
-          <a 
+          <a
             href={category.href}
             className={`inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r ${category.gradient} text-white shadow-lg group-hover:shadow-xl transform group-hover:scale-110 transition-all duration-300`}
           >
@@ -99,8 +99,10 @@ const CategoryCard = ({ category, index }) => {
       </div>
 
       {/* Animated Border */}
-      <div className={`absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r ${category.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`} 
-           style={{ padding: '2px' }}>
+      <div
+        className={`absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r ${category.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10`}
+        style={{ padding: '2px' }}
+      >
         <div className="w-full h-full rounded-2xl bg-white dark:bg-slate-800" />
       </div>
     </div>
@@ -109,7 +111,10 @@ const CategoryCard = ({ category, index }) => {
 
 const CategoriesSection = () => {
   return (
-    <section id="categories" className="py-20 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden">
+    <section
+      id="categories"
+      className="py-20 bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 relative overflow-hidden"
+    >
       {/* Background Decorations */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-red-200 to-pink-200 rounded-full blur-3xl opacity-30 animate-pulse" />
@@ -158,39 +163,14 @@ const CategoriesSection = () => {
             </div>
             <div className="w-px h-8 bg-gray-300 dark:bg-gray-600" />
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800 dark:text-white">15K+</div>
+              <div className="text-2xl font-bold text-gray-800 dark:text-white">15K+</</div>
               <div className="text-sm text-gray-600 dark:text-gray-400">Reviews</div>
             </div>
           </div>
         </div>
-=======
-import React from 'react';
-
-const CTASection = () => {
-  return (
-    <section className="bg-red-600">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">
-          Ready to Share Your Culinary Genius?
-        </h2>
-        <p className="text-red-100 text-lg mb-8 max-w-2xl mx-auto">
-          Create your free account today and become part of the Recipedia family. 
-          Your next favorite dish is just a click away.
-        </p>
-        <a 
-          href="/register" 
-          className="bg-white text-red-600 font-bold py-4 px-8 rounded-full text-lg hover:bg-gray-100 transition transform hover:scale-105 shadow-lg"
-        >
-          Sign Up Now
-        </a>
->>>>>>> Stashed changes
       </div>
     </section>
   );
 };
 
-<<<<<<< Updated upstream
 export default CategoriesSection;
-=======
-export default CTASection;
->>>>>>> Stashed changes

@@ -79,7 +79,7 @@ const CategoryCard = ({ category, index }) => {
       <div className="p-6 relative">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-gray-800 group-hover:to-gray-600 dark:group-hover:from-white dark:group-hover:to-gray-300 transition-all duration-300">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-black group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-gray-800 group-hover:to-gray-600 dark:group-hover:from-white dark:group-hover:to-gray-300 transition-all duration-300">
               {category.name}
             </h3>
             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500 dark:text-gray-400">

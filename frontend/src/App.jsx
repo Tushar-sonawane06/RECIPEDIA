@@ -5,16 +5,16 @@ import "./styles/animations.css";
 import "./services/axiosConfig.js";
 import { authService } from "./services/authService.js";
 // Page Imports
-const RecipeListPage = lazy(() => import("./pages/RecipeListPage.jsx"))
-const RecipeDetailPage = lazy(() => import("./pages/RecipeDetailPage.jsx"))
+const RecipeListPage = lazy(() => import("./pages/RecipeListPage.jsx"));
+const RecipeDetailPage = lazy(() => import("./pages/RecipeDetailPage.jsx"));
 import RecipeHome from "./pages/RecipeHome.jsx";
-const Login = lazy(() => import("./pages/Login.jsx"))
-const Register = lazy(() => import("./pages/Register.jsx"))
-const UserProfile = lazy(() => import("./pages/UserProfile.jsx"))
-const AddRecipe = lazy(() => import("./pages/AddRecipe.jsx"))
-const About = lazy(() => import("./pages/About.jsx"))
-const NotFound = lazy(() => import("./pages/NotFound.jsx"))
-const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
+const Login = lazy(() => import("./pages/Login.jsx"));
+const Register = lazy(() => import("./pages/Register.jsx"));
+const UserProfile = lazy(() => import("./pages/UserProfile.jsx"));
+const AddRecipe = lazy(() => import("./pages/AddRecipe.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
+const NotFound = lazy(() => import("./pages/NotFound.jsx"));
+const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"));
 const Explore = lazy(() => import("./pages/Explore.jsx"));
 import * as Sentry from "@sentry/react";
 
@@ -22,18 +22,20 @@ import * as Sentry from "@sentry/react";
 import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
-//import CustomizedProgressBars from "./components/Loader.jsx";
+// import CustomizedProgressBars from "./components/Loader.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
-const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"))
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"));
+const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"));
 
 // AppContent handles all routes and layout (must be rendered INSIDE a Router)
 function AppContent() {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   // Determine if current page is an auth page
   const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+
   // Check authentication status on mount and route changes
   useEffect(() => {
     const checkAuth = () => {
@@ -48,15 +50,18 @@ function AppContent() {
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
   }, [location.pathname]);
+
   // Handle logout
   const handleLogout = () => {
     authService.clearAuth();
     setIsAuthenticated(false);
   };
+
   // Handle successful login/register
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
   };
+
   // Add/remove body classes for auth pages
   useEffect(() => {
     if (isAuthPage) {
@@ -71,6 +76,7 @@ function AppContent() {
       document.body.style.overflow = "auto";
     };
   }, [isAuthPage]);
+
   return (
     <div className="app-container min-h-screen bg-gray-50 dark:bg-slate-900 transition-colors duration-300">
       <ScrollToTop />
@@ -87,28 +93,31 @@ function AppContent() {
         <Routes>
           {/* Core Routes */}
           <Route path="/" element={<RecipeHome />} />
-         {/* Auth Routes - Clean without wrapper divs */}
-        <Route
-          path="/login"
-          element={
-            <div className="login-bg">
-              <Login onAuthSuccess={handleAuthSuccess} />
-            </div>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <div className="register-bg">
-              <Register onAuthSuccess={handleAuthSuccess} />
-            </div>
-          }
-        />
+
+          {/* Auth Routes - Clean without wrapper divs */}
+          <Route
+            path="/login"
+            element={
+              <div className="login-bg">
+                <Login onAuthSuccess={handleAuthSuccess} />
+              </div>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <div className="register-bg">
+                <Register onAuthSuccess={handleAuthSuccess} />
+              </div>
+            }
+          />
 
           {/* Protected/User Routes */}
           <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><UserProfile /></PrivateRoute>} /> {/* You can create a separate Settings component */}
+          <Route path="/settings" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
           <Route path="/add-recipe" element={<PrivateRoute><AddRecipe /></PrivateRoute>} />
+
+          {/* Public Pages */}
           <Route path="/about" element={<About />} />
           <Route path="/explore" element={<Explore />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
@@ -127,14 +136,14 @@ function AppContent() {
           <Route path="/error" element={<ErrorPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+      </Suspense>
 
- {/* Show Footer only if NOT on auth pages */}
+      {/* Show Footer only if NOT on auth pages */}
       {!isAuthPage && <Footer />}
     </div>
   );
 }
-</Suspense>
-    
+
 // Main App Component: provide the Router here (single source of truth)
 function App() {
   return (
@@ -143,4 +152,5 @@ function App() {
     </Router>
   );
 }
+
 export default App;

@@ -6,9 +6,7 @@ import { FiSearch, FiArrowRight, FiClock, FiStar } from "react-icons/fi";
 import { GiKnifeFork, GiRoastChicken, GiCakeSlice, GiMartini } from "react-icons/gi";
 import { HiSparkles } from "react-icons/hi"; // ✨ NEW: Added sparkles icon
 import recipes from "../data/recipes.json"; // Adjust path as necessary
-import RecipeCard from "../components/RecipeCard"
-
-
+// ❌ Removed: import RecipeCard from "../components/RecipeCard"
 
 // --- Animation Variants ---
 const containerVariants = {
@@ -32,9 +30,9 @@ const floatingVariants = {
     transition: {
       duration: 4,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
+      ease: "easeInOut",
+    },
+  },
 };
 
 // ✨ NEW: Added sparkle animation variants
@@ -46,68 +44,89 @@ const sparkleVariants = {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
-  }
+      ease: "easeInOut",
+    },
+  },
 };
 
 // --- Reusable Components (NoResults is still specific to ExplorePage for now) ---
 
-const RecipeCard = ({ recipe, accent, onClick }) => (
-  <motion.div
-    layout
-    variants={itemVariants}
-    onClick={onClick}
-    whileHover={{ y: -8 }}
-    transition={{ type: "spring", stiffness: 300, damping: 20 }}
-    className="group relative flex-shrink-0 w-[280px] md:w-[320px] h-[400px] snap-start cursor-pointer"
-  >
-    <div className={`absolute inset-0 rounded-2xl ${accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg`} />
-    <div className="relative w-full h-full bg-white/40 dark:bg-slate-800/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/20 dark:border-slate-700/50 shadow-xl group-hover:shadow-2xl transition-shadow duration-300 flex flex-col">
-      <div className="w-full h-1/2 overflow-hidden relative">
-        {/* ✨ NEW: Added difficulty badge */}
-        <div className="absolute top-3 left-3 z-10 px-2 py-1 bg-black/20 backdrop-blur-md rounded-full text-xs text-white font-medium">
-          Easy
-        </div>
-        {/* ✨ NEW: Added rating badge */}
-        <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-1 bg-black/20 backdrop-blur-md rounded-full text-xs text-white font-medium">
-          <FiStar className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-          4.8
-        </div>
-        <img
-          src={recipe.imageUrl}
-          alt={recipe.title}
-          className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-        />
-        {/* ✨ NEW: Added gradient overlay for better text readability */}
-        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/30 to-transparent" />
-      </div>
-      <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 truncate">{recipe.title}</h3>
-        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 flex-grow">{recipe.description}</p>
+// ✅ Renamed to avoid name collision with any imported component
+const ExploreRecipeCard = ({ recipe, accent, onClick }) => {
+  const imgSrc =
+    recipe?.imageUrl ||
+    recipe?.image ||
+    (Array.isArray(recipe?.images) ? recipe.images[0] : undefined) ||
+    "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&auto=format&fit=crop&q=60";
 
-        {/* ✨ NEW: Added cooking time and servings info */}
-        <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-1">
-            <FiClock className="w-3 h-3" />
-            30 min
-          </div>
-          <div className="flex items-center gap-1">
-            <GiKnifeFork className="w-3 h-3" />
-            4 servings
-          </div>
-        </div>
+  const title = recipe?.title || recipe?.name || "Recipe";
+  const description =
+    recipe?.description ||
+    recipe?.about ||
+    "A delicious recipe from our collection.";
 
-        <div className="mt-4">
-          <span className="inline-flex items-center text-sm font-semibold text-slate-700 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r from-pink-500 to-violet-500">
-            View Recipe
-            <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-          </span>
+  return (
+    <motion.div
+      layout
+      variants={itemVariants}
+      onClick={onClick}
+      whileHover={{ y: -8 }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="group relative flex-shrink-0 w-[280px] md:w-[320px] h-[400px] snap-start cursor-pointer"
+    >
+      <div
+        className={`absolute inset-0 rounded-2xl ${accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-lg`}
+      />
+      <div className="relative w-full h-full bg-white/40 dark:bg-slate-800/40 backdrop-blur-lg rounded-2xl overflow-hidden border border-white/20 dark:border-slate-700/50 shadow-xl group-hover:shadow-2xl transition-shadow duration-300 flex flex-col">
+        <div className="w-full h-1/2 overflow-hidden relative">
+          {/* ✨ NEW: Added difficulty badge */}
+          <div className="absolute top-3 left-3 z-10 px-2 py-1 bg-black/20 backdrop-blur-md rounded-full text-xs text-white font-medium">
+            Easy
+          </div>
+          {/* ✨ NEW: Added rating badge */}
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-1 px-2 py-1 bg-black/20 backdrop-blur-md rounded-full text-xs text-white font-medium">
+            <FiStar className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+            4.8
+          </div>
+          <img
+            src={imgSrc}
+            alt={title}
+            className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
+          />
+          {/* ✨ NEW: Added gradient overlay for better text readability */}
+          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/30 to-transparent" />
+        </div>
+        <div className="p-5 flex flex-col flex-grow">
+          <h3 className="text-xl font-bold text-slate-800 dark:text-white mb-2 truncate">
+            {title}
+          </h3>
+          <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 flex-grow">
+            {description}
+          </p>
+
+          {/* ✨ NEW: Added cooking time and servings info */}
+          <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 dark:text-slate-400">
+            <div className="flex items-center gap-1">
+              <FiClock className="w-3 h-3" />
+              30 min
+            </div>
+            <div className="flex items-center gap-1">
+              <GiKnifeFork className="w-3 h-3" />
+              4 servings
+            </div>
+          </div>
+
+          <div className="mt-4">
+            <span className="inline-flex items-center text-sm font-semibold text-slate-700 dark:text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r from-pink-500 to-violet-500">
+              View Recipe
+              <FiArrowRight className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  </motion.div>
-);
+    </motion.div>
+  );
+};
 
 // ✨ NEW: Enhanced NoResults component with better animations
 const NoResults = () => (
@@ -135,7 +154,7 @@ const NoResults = () => (
         variants={sparkleVariants}
         initial="initial"
         animate="animate"
-        style={{ animationDelay: '1s' }}
+        style={{ animationDelay: "1s" }}
         className="absolute -bottom-2 -left-2 text-pink-400"
       >
         <HiSparkles className="w-4 h-4" />
@@ -145,7 +164,9 @@ const NoResults = () => (
       <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">
         No recipes found.
       </p>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Try a different search term!</p>
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        Try a different search term!
+      </p>
     </motion.div>
   </motion.div>
 );
@@ -169,7 +190,11 @@ const FeaturedRecipe = ({ recipe, navigate }) => (
         >
           <div className="w-32 h-32 md:w-40 md:h-40 rounded-xl overflow-hidden shadow-lg">
             <img
-              src={recipe?.imageUrl || "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300"}
+              src={
+                recipe?.imageUrl ||
+                recipe?.image ||
+                "https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=300"
+              }
               alt={recipe?.title || "Featured Recipe"}
               className="w-full h-full object-cover"
             />
@@ -202,10 +227,17 @@ const FeaturedRecipe = ({ recipe, navigate }) => (
             {recipe?.title || "Chef's Special Pasta"}
           </h2>
           <p className="text-slate-600 dark:text-slate-300 mb-4 text-sm line-clamp-2">
-            {recipe?.description || "A delightful fusion of flavors that will transport your taste buds to culinary heaven."}
+            {recipe?.description ||
+              "A delightful fusion of flavors that will transport your taste buds to culinary heaven."}
           </p>
           <motion.button
-            onClick={() => navigate(`/recipes/${recipe?.category || 'featured'}/${recipe?.slug || 'special'}`)}
+            onClick={() =>
+              navigate(
+                `/recipes/${recipe?.category || "featured"}/${
+                  recipe?.slug || "special"
+                }`
+              )
+            }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md hover:shadow-lg transition-shadow duration-300"
@@ -224,10 +256,15 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
   const scrollContainerRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
 
-  const filteredData = useMemo(() =>
-    config.data.filter((recipe) =>
-      recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
-    ), [config.data, searchQuery]);
+  const filteredData = useMemo(
+    () =>
+      config.data.filter((recipe) =>
+        (recipe.title || recipe.name || "")
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase())
+      ),
+    [config.data, searchQuery]
+  );
 
   // --- Scroll buttons state ---
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -270,13 +307,19 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
       className="mb-16"
     >
       <motion.div variants={itemVariants} className="flex items-center mb-6">
-        <config.Icon className={`text-4xl mr-3 bg-clip-text text-transparent bg-gradient-to-br ${config.accent}`} />
-        <h2 className="text-3xl font-extrabold text-slate-800 dark:text-white">{config.title}</h2>
+        <config.Icon
+          className={`text-4xl mr-3 bg-clip-text text-transparent bg-gradient-to-br ${config.accent}`}
+        />
+        <h2 className="text-3xl font-extrabold text-slate-800 dark:text-white">
+          {config.title}
+        </h2>
         {/* ✨ NEW: Enhanced section header with recipe count */}
         <span className="ml-4 px-3 py-1 bg-slate-200/50 dark:bg-slate-700/50 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300">
           {filteredData.length} recipes
         </span>
-        <div className={`h-1 flex-grow ml-6 rounded-full bg-gradient-to-r ${config.accent} opacity-30`} />
+        <div
+          className={`h-1 flex-grow ml-6 rounded-full bg-gradient-to-r ${config.accent} opacity-30`}
+        />
       </motion.div>
 
       <div className="relative">
@@ -298,11 +341,17 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
           <AnimatePresence>
             {filteredData.length > 0 ? (
               filteredData.map((recipe) => (
-                <RecipeCard
-                  key={recipe.slug}
+                <ExploreRecipeCard
+                  key={recipe.slug || recipe.id || recipe.title}
                   recipe={recipe}
                   accent={config.accent}
-                  onClick={() => navigate(`/recipes/${recipe.category}/${recipe.slug}`)}
+                  onClick={() =>
+                    navigate(
+                      `/recipes/${recipe.category}/${
+                        recipe.slug || recipe.id
+                      }`
+                    )
+                  }
                 />
               ))
             ) : (
@@ -338,19 +387,20 @@ const ExplorePage = () => {
   // debounce
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDebounceSearch(searchQuery)
+      setDebounceSearch(searchQuery);
     }, 500);
-    return () => clearTimeout(timer)
-  }, [searchQuery])
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Featured recipe
   useEffect(() => {
     if (recipes.length > 0) {
-      const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+      const randomRecipe =
+        recipes[Math.floor(Math.random() * recipes.length)];
       setFeaturedRecipe({
         title: randomRecipe.name,
         description: randomRecipe.about,
-        imageUrl: randomRecipe.image,
+        imageUrl: randomRecipe.image || randomRecipe.images?.[0],
         category: randomRecipe.category,
         slug: randomRecipe.id,
       });
@@ -358,7 +408,6 @@ const ExplorePage = () => {
   }, []);
 
   const sectionConfigs = useMemo(() => {
-
     const mapRecipes = (category) =>
       recipes
         .filter((r) => r.category === category)
@@ -366,6 +415,7 @@ const ExplorePage = () => {
           title: r.name,
           description: r.about,
           images: r.images,
+          image: r.image,
           category: r.category,
           slug: r.id,
         }));
@@ -376,28 +426,28 @@ const ExplorePage = () => {
         data: mapRecipes("veg"),
         Icon: GiKnifeFork,
         accent: "from-emerald-500 to-green-600",
-        scrollbar: "scrollbar-green" // ✨ NEW: Added themed scrollbars
+        scrollbar: "scrollbar-green", // ✨ NEW: Added themed scrollbars
       },
       {
         title: "Hearty Non-Vegetarian",
         data: mapRecipes("nonveg"),
         Icon: GiRoastChicken,
         accent: "from-rose-500 to-red-600",
-        scrollbar: "scrollbar-red"
+        scrollbar: "scrollbar-red",
       },
       {
         title: "Sweet Desserts",
         data: mapRecipes("dessert"),
         Icon: GiCakeSlice,
         accent: "from-amber-500 to-orange-600",
-        scrollbar: "scrollbar-orange"
+        scrollbar: "scrollbar-orange",
       },
       {
         title: "Cool Beverages",
         data: mapRecipes("beverages"),
         Icon: GiMartini,
         accent: "from-sky-500 to-indigo-600",
-        scrollbar: "scrollbar-blue"
+        scrollbar: "scrollbar-blue",
       },
     ];
   }, []);
@@ -422,10 +472,7 @@ const ExplorePage = () => {
           variants={containerVariants}
           className="text-center pt-24 pb-12"
         >
-          <motion.div
-            variants={itemVariants}
-            className="relative inline-block"
-          >
+          <motion.div variants={itemVariants} className="relative inline-block">
             <h1 className="text-5xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-br from-yellow-500 to-red-600 dark:from-white dark:to-slate-400">
               World of Flavors
             </h1>
@@ -442,15 +489,19 @@ const ExplorePage = () => {
               variants={sparkleVariants}
               initial="initial"
               animate="animate"
-              style={{ animationDelay: '1s' }}
+              style={{ animationDelay: "1s" }}
               className="absolute -bottom-2 -left-4 text-pink-400"
             >
               <HiSparkles className="w-6 h-6" />
             </motion.div>
           </motion.div>
 
-          <motion.p variants={itemVariants} className="text-lg text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto">
-            Find your next favorite meal. Search our curated collections and start cooking today.
+          <motion.p
+            variants={itemVariants}
+            className="text-lg text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto"
+          >
+            Find your next favorite meal. Search our curated collections and
+            start cooking today.
           </motion.p>
 
           {/* ✨ NEW: Added quick stats */}
@@ -459,15 +510,23 @@ const ExplorePage = () => {
             className="flex justify-center gap-8 mt-8 text-sm font-medium"
           >
             <div className="text-center">
-              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{recipes.length}+</div>
+              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
+                {recipes.length}+
+              </div>
               <div className="text-slate-600 dark:text-slate-400">Recipes</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">4</div>
-              <div className="text-slate-600 dark:text-slate-400">Categories</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                4
+              </div>
+              <div className="text-slate-600 dark:text-slate-400">
+                Categories
+              </div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">5★</div>
+              <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">
+                5★
+              </div>
               <div className="text-slate-600 dark:text-slate-400">Rated</div>
             </div>
           </motion.div>
@@ -496,14 +555,21 @@ const ExplorePage = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-slate-400 dark:text-slate-500"
               >
-                {recipes.filter(r => r.name.toLowerCase().includes(searchQuery.toLowerCase())).length} found
+                {
+                  recipes.filter((r) =>
+                    (r.name || "").toLowerCase().includes(searchQuery.toLowerCase())
+                  ).length
+                }{" "}
+                found
               </motion.div>
             )}
           </div>
         </motion.div>
 
         {/* ✨ NEW: Added Featured Recipe Section */}
-        {featuredRecipe && <FeaturedRecipe recipe={featuredRecipe} navigate={navigate} />}
+        {featuredRecipe && (
+          <FeaturedRecipe recipe={featuredRecipe} navigate={navigate} />
+        )}
 
         {/* Recipe Sections */}
         <div className="space-y-12">
@@ -519,6 +585,6 @@ const ExplorePage = () => {
       </div>
     </main>
   );
-}
+};
 
-export default ExplorePage
+export default ExplorePage;

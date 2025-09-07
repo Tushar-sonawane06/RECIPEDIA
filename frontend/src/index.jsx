@@ -6,12 +6,12 @@ import reportWebVitals from './reportWebVitals';
 import * as Sentry from '@sentry/react'
 
 // errors will be sent to sentry dashboard
-Sentry.init({
-  dsn: 'https://8894f23615782158c8d943136006af75@o4509950480809984.ingest.us.sentry.io/4509950489395200',
-  integrations: [new Sentry.browserTracingIntegration()],
-  tracesSampleRate: 0.2,    // monitor performance
-  sendDefaultPii: false,   // Personally Identifiable Information
-})
+// Sentry.init({
+//   dsn: 'https://8894f23615782158c8d943136006af75@o4509950480809984.ingest.us.sentry.io/4509950489395200',
+//   integrations: [new Sentry.browserTracingIntegration()],
+//   tracesSampleRate: 0.2,    // monitor performance
+//   sendDefaultPii: false,   // Personally Identifiable Information
+// })
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

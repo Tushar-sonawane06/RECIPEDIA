@@ -17,12 +17,14 @@ const AddRecipe = lazy(() => import("./pages/AddRecipe.jsx"))
 const About = lazy(() => import("./pages/About.jsx"))
 const NotFound = lazy(() => import("./pages/NotFound.jsx"))
 const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"))
-const Explore = lazy(() => import("./pages/Explore.jsx"))
+const Explore = lazy(() => import("./pages/Explore.jsx"));
+import * as Sentry from "@sentry/react";
 
 // Components
 import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import Footer from "./components/Footer.jsx";
+import CustomizedProgressBars from "./components/Loader.jsx";
 import ScrollReset from "./components/ScrollReset.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"))
@@ -86,62 +88,68 @@ function AppContent() {
       <ScrollToTop />
 
       {/* Only show Navbar if NOT on auth pages */}
-      {!isAuthPage && (
-        <Navbar
-          isAuthenticated={isAuthenticated}
-          onLogout={handleLogout}
-        />
-      )}
+      {
+        !isAuthPage && (
+          <Navbar
+            isAuthenticated={isAuthenticated}
+            onLogout={handleLogout}
+          />
+        )
+      }
+      <Sentry.ErrorBoundary fallback={({error, resetError})=>(
+        <ErrorPage error={error} resetError={resetError}/>
+      )}>
+        <Suspense fallback={<div><CustomizedProgressBars/></div>}>
+          <Routes>
+            {/* Core Routes */}
+            <Route path="/" element={<RecipeHome />} />
+            <Route path="/home" element={<RecipeHome />} />
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Routes>
-          {/* Core Routes */}
-          <Route path="/" element={<RecipeHome />} />
-         {/* Auth Routes - Clean without wrapper divs */}
-        <Route
-          path="/login"
-          element={
-            <div className="login-bg">
-              <Login onAuthSuccess={handleAuthSuccess} />
-            </div>
-          }
-        />
-        <Route
-          path="/register"
-          element={
-            <div className="register-bg">
-              <Register onAuthSuccess={handleAuthSuccess} />
-            </div>
-          }
-        />
-          
-          {/* Protected/User Routes */}
-          <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
-          <Route path="/settings" element={<PrivateRoute><UserProfile /></PrivateRoute>} /> {/* You can create a separate Settings component */}
-          <Route path="/add-recipe" element={<PrivateRoute><AddRecipe /></PrivateRoute>} />
-          <Route path="/about" element={<About />} />
-          <Route path="/explore" element={<Explore />} />
-          <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/terms-conditions" element={<TermsConditions />} />
+            {/* Auth Routes - Clean without wrapper divs */}
+            <Route
+              path="/login"
+              element={
+                <div className="login-bg">
+                  <Login onAuthSuccess={handleAuthSuccess} />
+                </div>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <div className="register-bg">
+                  <Register onAuthSuccess={handleAuthSuccess} />
+                </div>
+              }
+            />
 
-          {/* Category Pages */}
-          <Route path="/veg" element={<RecipeListPage category="veg" />} />
-          <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
-          <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
-          <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
+            {/* Protected/User Routes */}
+            <Route path="/profile" element={<UserProfile />} />
+            <Route path="/settings" element={<UserProfile />} /> {/* You can create a separate Settings component */}
+            <Route path="/add-recipe" element={<AddRecipe />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/explore" element={<Explore />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
 
-          {/* Dynamic Recipe Detail Page */}
-          <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
+            {/* Category Pages */}
+            <Route path="/veg" element={<RecipeListPage category="veg" />} />
+            <Route path="/nonveg" element={<RecipeListPage category="nonveg" />} />
+            <Route path="/dessert" element={<RecipeListPage category="dessert" />} />
+            <Route path="/beverages" element={<RecipeListPage category="beverages" />} />
 
-          {/* Error and Fallback Routes */}
-          <Route path="/error" element={<ErrorPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            {/* Error and Fallback Routes */}
+            <Route path="/error" element={<ErrorPage />} />
+            <Route path="*" element={<NotFound />} />
+             <Route path="/recipes/:category/:recipeId" element={<RecipeDetailPage />} />
+          </Routes>
+
       </Suspense>
+    </Sentry.ErrorBoundary >
+    {/* Show Footer only if NOT on auth pages */ }
+  { !isAuthPage && <Footer /> }
+    </div >
 
-      {/* Show Footer only if NOT on auth pages */}
-      {!isAuthPage && <Footer />}
-    </div>
   );
 }
 

@@ -124,14 +124,23 @@ const RecipeDetailPage = () => {
         animate={{ opacity: 1, transition: { duration: 0.8 } }}
       >
         <div className="absolute inset-0 overflow-hidden rounded-b-3xl">
-          <motion.img
-            src={recipe.image}
-            onError={(e) => (e.target.src = '/default.jpg')}
-            alt={recipe.name}
-            className="w-full h-full object-cover"
-            initial={{ scale: 1.15 }}
-            animate={{ scale: 1, transition: { duration: 1.5, ease: "circOut" } }}
-          />
+          <picture>
+            {recipe.images?.avif && (
+              <source srcSet={recipe.images.avif} type="image/avif" />
+            )}
+            {recipe.images?.webp && (
+              <source srcSet={recipe.images.webp} type="image/webp" />
+            )}
+            <motion.img
+              src={recipe.images?.jpg || recipe.images?.webp || recipe.images?.avif}
+              onError={(e) => (e.target.src = '/default.jpg')}
+              alt={recipe.name}
+              className="w-full h-full object-cover"
+              initial={{ scale: 1.15 }}
+              animate={{ scale: 1, transition: { duration: 1.5, ease: "circOut" } }}
+              loading='lazy'
+            />
+          </picture>
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
         </div>
         <div className="absolute top-8 left-4 sm:left-8 z-10">
@@ -184,7 +193,7 @@ const RecipeDetailPage = () => {
               <motion.ul className="space-y-4" variants={containerVariants}>
                 {recipe.ingredients.map((item, i) => (
                   <motion.li key={i} className="flex items-start gap-3 text-gray-700 dark:text-gray-300" variants={itemVariants}>
-                    <FaCheck className="text-[#ff4b2b] mt-1.5 flex-shrink-0"/>
+                    <FaCheck className="text-[#ff4b2b] mt-1.5 flex-shrink-0" />
                     <span>{item}</span>
                   </motion.li>
                 ))}
@@ -271,14 +280,14 @@ const RecipeDetailPage = () => {
               </AnimatePresence>
               {showMoreButton && (
                 <div className="text-center w-full">
-                    <motion.button
+                  <motion.button
                     onClick={() => setShowAllComments(true)}
                     className="mt-4 px-6 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#ff4b2b] to-[#ff416c] shadow-md hover:shadow-lg transition-all duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    >
+                  >
                     Show More Comments
-                    </motion.button>
+                  </motion.button>
                 </div>
               )}
             </div>

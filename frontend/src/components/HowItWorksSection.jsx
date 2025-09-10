@@ -31,15 +31,15 @@ const StepCard = ({ step, index, isActive, onHover }) => {
   return (
     <div 
       className={`relative p-8 rounded-2xl transition-all duration-700 transform hover:-translate-y-4 ${
-        isActive ? 'bg-white dark:bg-slate-800 shadow-2xl scale-105' : 'bg-white/50 dark:bg-slate-800/50 shadow-lg hover:shadow-xl'
+        isActive ? ' shadow-2xl scale-105' : 'bg-white/50 dark:bg-slate-800/50 shadow-lg hover:shadow-xl'
       }`}
       onMouseEnter={() => onHover(index)}
       onMouseLeave={() => onHover(-1)}
       style={{ animationDelay: `${index * 200}ms` }}
     >
       {/* Step Number */}
-      <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-gray-800 to-gray-700 dark:from-white dark:to-gray-200 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-lg">
-        <span className="text-white dark:text-gray-800 font-bold text-lg">{index + 1}</span>
+      <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-gray-800 to-gray-700 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
+        <span className="text-white  font-bold text-lg">{index + 1}</span>
       </div>
 
       {/* Animated Background */}
@@ -58,7 +58,7 @@ const StepCard = ({ step, index, isActive, onHover }) => {
         <h3 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">
           {step.title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
           {step.description}
         </p>
 

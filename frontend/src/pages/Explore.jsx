@@ -7,9 +7,6 @@ import { GiKnifeFork, GiRoastChicken, GiCakeSlice, GiMartini } from "react-icons
 import { HiSparkles } from "react-icons/hi"; // ✨ NEW: Added sparkles icon
 import recipes from "../data/recipes.json"; // Adjust path as necessary
 import RecipeCard from "../components/RecipeCard"
-
-
-
 // --- Animation Variants ---
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -18,16 +15,14 @@ const containerVariants = {
     transition: { staggerChildren: 0.1, delayChildren: 0.2 },
   },
 };
-
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
-
 // ✨ NEW: Added floating animation variants
 const floatingVariants = {
   initial: { y: 0 },
-  animate: { 
+  animate: {
     y: [-10, 10, -10],
     transition: {
       duration: 4,
@@ -36,11 +31,10 @@ const floatingVariants = {
     }
   }
 };
-
 // ✨ NEW: Added sparkle animation variants
 const sparkleVariants = {
   initial: { scale: 0, rotate: 0 },
-  animate: { 
+  animate: {
     scale: [0, 1, 0],
     rotate: [0, 180, 360],
     transition: {
@@ -52,6 +46,12 @@ const sparkleVariants = {
 };
 
 // --- Reusable Components (NoResults is still specific to ExplorePage for now) ---
+
+
+
+
+
+
 
 const NoResults = () => (
   <motion.div
@@ -83,7 +83,7 @@ const NoResults = () => (
       >
         <HiSparkles className="w-4 h-4" />
       </motion.div>
-      
+
       <GiKnifeFork className="mx-auto text-5xl text-gray-400 dark:text-gray-500 mb-4" />
       <p className="text-gray-600 dark:text-gray-300 text-lg font-medium">
         No recipes found.
@@ -92,7 +92,6 @@ const NoResults = () => (
     </motion.div>
   </motion.div>
 );
-
 // ✨ NEW: Added featured recipe component - COMPACT VERSION
 const FeaturedRecipe = ({ recipe, navigate }) => (
   <motion.div
@@ -128,6 +127,7 @@ const FeaturedRecipe = ({ recipe, navigate }) => (
           </motion.div>
         </motion.div>
         
+
         {/* Content Section - More Compact */}
         <div className="flex-1 text-center md:text-left">
           <motion.div
@@ -161,21 +161,17 @@ const FeaturedRecipe = ({ recipe, navigate }) => (
     </div>
   </motion.div>
 );
-
 const RecipeSection = ({ config, searchQuery, navigate }) => {
   const sectionRef = useRef(null);
   const scrollContainerRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
-
   const filteredData = useMemo(() =>
     config.data.filter((recipe) =>
       recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
     ), [config.data, searchQuery]);
-
   // --- Scroll buttons state ---
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-
   const updateScrollButtons = () => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -184,17 +180,14 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
     setCanScrollLeft(container.scrollLeft > threshold);
     setCanScrollRight(container.scrollLeft < maxScrollLeft - threshold);
   };
-
   const scrollLeft = () => {
     const container = scrollContainerRef.current;
     container.scrollBy({ left: -300, behavior: "smooth" });
   };
-
   const scrollRight = () => {
     const container = scrollContainerRef.current;
     container.scrollBy({ left: 300, behavior: "smooth" });
   };
-
   React.useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -203,7 +196,6 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
     updateScrollButtons(); // initial check
     return () => container.removeEventListener("scroll", handleScroll);
   }, [filteredData]);
-
   return (
     <motion.section
       ref={sectionRef}
@@ -221,7 +213,6 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
         </span>
         <div className={`h-1 flex-grow ml-6 rounded-full bg-gradient-to-r ${config.accent} opacity-30`} />
       </motion.div>
-
       <div className="relative">
         {/* --- Left Scroll Button --- */}
         {canScrollLeft && (
@@ -232,7 +223,6 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
             &#8249;
           </button>
         )}
-
         {/* --- Recipe Cards Scroll Container --- */}
         <div
           ref={scrollContainerRef}
@@ -254,7 +244,6 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
           </AnimatePresence>
           <div className="flex-shrink-0 w-1 h-1" /> {/* Spacer */}
         </div>
-
         {/* --- Right Scroll Button --- */}
         {canScrollRight && (
           <button
@@ -264,13 +253,12 @@ const RecipeSection = ({ config, searchQuery, navigate }) => {
             &#8250;
           </button>
         )}
-
         {filteredData.length === 0 && isInView && <NoResults />}
       </div>
     </motion.section>
   );
 };
-
+// --- Main Page Component ---
 // --- Main Page Component ---
 const ExplorePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -292,6 +280,7 @@ const ExplorePage = () => {
   }, []);
 
   const sectionConfigs = useMemo(() => {
+
     const mapRecipes = (category) =>
       recipes
         .filter((r) => r.category === category)
@@ -299,6 +288,7 @@ const ExplorePage = () => {
           title: r.name,
           description: r.about,
           imageUrl: r.image,
+          images: r.images,
           category: r.category,
           slug: r.id,
         }));
@@ -321,20 +311,19 @@ const ExplorePage = () => {
       { 
         title: "Sweet Desserts", 
         data: mapRecipes("dessert"), 
-        Icon: GiCakeSlice, 
+        Icon: GiCakeSlice,  
         accent: "from-amber-500 to-orange-600",
         scrollbar: "scrollbar-orange"
       },
       { 
         title: "Cool Beverages", 
         data: mapRecipes("beverages"), 
-        Icon: GiMartini, 
+        Icon: GiMartini,  
         accent: "from-sky-500 to-indigo-600",
         scrollbar: "scrollbar-blue"
       },
     ];
   }, []);
-
   return (
     <main className="relative min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-200 overflow-x-hidden">
       {/* ✨ ENHANCED: More dynamic animated aurora background */}
@@ -387,7 +376,7 @@ const ExplorePage = () => {
           </motion.p>
           
           {/* ✨ NEW: Added quick stats */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex justify-center gap-8 mt-8 text-sm font-medium"
           >
@@ -405,7 +394,6 @@ const ExplorePage = () => {
             </div>
           </motion.div>
         </motion.div>
-
         {/* ✨ ENHANCED: Better search bar with more animations */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -434,10 +422,8 @@ const ExplorePage = () => {
             )}
           </div>
         </motion.div>
-
         {/* ✨ NEW: Added Featured Recipe Section */}
         {featuredRecipe && <FeaturedRecipe recipe={featuredRecipe} navigate={navigate} />}
-
         {/* Recipe Sections */}
         <div className="space-y-12">
           {sectionConfigs.map((config) => (
@@ -445,6 +431,7 @@ const ExplorePage = () => {
               key={config.title}
               config={config}
               searchQuery={searchQuery}
+              //searchQuery={debounceSearch}
               navigate={navigate}
             />
           ))}
@@ -455,4 +442,3 @@ const ExplorePage = () => {
 };
 
 export default ExplorePage;
-

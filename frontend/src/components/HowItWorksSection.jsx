@@ -41,8 +41,8 @@ const StepCard = ({ step, index, isActive, onHover }) => {
       style={{ animationDelay: `${index * 200}ms` }}
     >
       {/* Step Number */}
-      <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-r from-gray-800 to-gray-700 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-        <span className="text-white font-bold text-lg">{index + 1}</span>
+      <div className="absolute -top-4 -left-4 w-12 h-12  dark:bg-gradient-to-r from-gray-800 to-gray-700 bg-white dark:from-white dark:to-gray-200 rounded-full flex items-center justify-center border-4 border-white dark:border-slate-900 shadow-lg">
+        <span className="text-black dark:text-gray-800 font-bold text-lg">{index + 1}</span>
       </div>
 
       {/* Animated Background */}

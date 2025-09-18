@@ -10,10 +10,6 @@ const sanitizeUser = (user) => {
   return userObj;
 };
 
-// GET /users/profile
-// WHY THIS FIX WORKS: This function securely gets the user's ID from the req.user object
-// which is populated by your authentication middleware. It prevents crashes by checking
-// if a user was found before trying to send a response.
 exports.getProfile = asyncHandler(async (req, res) => {
   // The user's ID comes from the validated token, not a URL parameter
   const user = await User.findById(req.user.userId);

@@ -27,6 +27,7 @@ import ScrollReset from "./components/ScrollReset.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy.jsx"));
 const TermsConditions = lazy(() => import("./pages/TermsConditions.jsx"));
+const Feedback = lazy(() => import("./pages/Feedback.jsx"));
 
 // AppContent handles all routes and layout (must be rendered INSIDE a Router)
 function AppContent() {
@@ -120,6 +121,7 @@ function AppContent() {
           {/* Public Pages */}
           <Route path="/about" element={<About />} />
           <Route path="/explore" element={<Explore />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms-conditions" element={<TermsConditions />} />
 

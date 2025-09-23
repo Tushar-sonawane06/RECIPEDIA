@@ -19,10 +19,8 @@ const RecipeCard = ({ recipe, accent, onClick }) => {
     transition={{ type: "spring", stiffness: 300, damping: 20 }}
     className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[340px] h-[440px] snap-start cursor-pointer"
   >
-    {/* Glow Accent */}
     <div className={`absolute inset-0 rounded-2xl ${accent} opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-xl`} />
     <div className="relative w-full h-full bg-gradient-to-br  from-white/60 via-white/40 to-white/20 dark:from-slate-800/70 dark:via-slate-800/50 dark:to-slate-800/30 backdrop-blur-lg rounded-2xl overflow-hidden border border-gray-200 dark:border-slate-700 group-hover:border-amber-400 group-hover:shadow-2xl transition-all duration-300 flex flex-col">
-      {/* Image with Category Badge + Favorite Button */}
       <div className="relative w-full h-1/2 overflow-hidden">
         <img
           src={recipe.imageUrl}
@@ -30,18 +28,16 @@ const RecipeCard = ({ recipe, accent, onClick }) => {
           alt={recipe.title}
           className="w-full h-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
         />
-        {/* Gradient overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" /> 
 
-        {/* Category Badge */}
         {recipe.category && (  
           <span className="absolute top-3 left-3 bg-gradient-to-r from-amber-500 to-pink-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
             {recipe.category}
           </span>
         )}
 
-        {/* Favorite Button */}
-        <button   
+        <button
+          aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
           onClick={(e) => {
             e.stopPropagation();
             setIsFavorite(!isFavorite);
@@ -52,9 +48,8 @@ const RecipeCard = ({ recipe, accent, onClick }) => {
         </button>
       </div>
       <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 truncate"> {recipe.title}</h3>
-        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2 flex-grow"> {recipe.description}</p>
-        {/* Ratings */}
+        <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2 truncate">{recipe.title}</h3>
+        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-2 flex-grow">{recipe.description}</p>
         {recipe.rating && (   
           <div className="flex items-center mt-2">
             {Array.from({ length: 5 }).map((_, i) => (
@@ -67,7 +62,6 @@ const RecipeCard = ({ recipe, accent, onClick }) => {
           </div>
         )}
 
-        {/* View Recipe Button */}
         <div className="mt-4">
           <span className="inline-flex items-center text-sm font-semibold  text-slate-700 dark:text-white  group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r from-pink-500 to-violet-500">
             View Recipe

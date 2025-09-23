@@ -1,5 +1,5 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaComments } from "react-icons/fa";
 import "../styles/Footer.css";
 
 const Footer = () => {
@@ -24,6 +24,7 @@ const Footer = () => {
             <li><a href="/about" className="hover:text-white transition-colors duration-300">About</a></li>
             <li><a href="/add-recipe" className="hover:text-white transition-colors duration-300">Add Recipe</a></li>
             <li><a href="/profile" className="hover:text-white transition-colors duration-300">Profile</a></li>
+            <li><a href="/feedback" className="hover:text-white transition-colors duration-300">Feedback</a></li>
             <li><a href="/privacy" className="hover:text-white transition-colors duration-300">Privacy</a></li>
             <li><a href="/terms-conditions" className="hover:text-white transition-colors duration-300">Terms</a></li>
 
@@ -41,9 +42,18 @@ const Footer = () => {
           </ul>
         </div>
 
-        {/* Contact Info */}
+        {/* Support & Contact */}
         <div className="footer-section">
-          <h4 className="text-lg font-semibold text-amber-400 mb-3">Contact Us</h4>
+          <h4 className="text-lg font-semibold text-amber-400 mb-3">Support</h4>
+          <div className="mb-3">
+            <a 
+              href="/feedback" 
+              className="inline-flex items-center gap-2 px-3 py-2 bg-amber-600 text-white text-sm font-medium rounded-lg hover:bg-amber-700 transition-colors duration-300"
+            >
+              <FaComments className="text-sm" />
+              Share Feedback
+            </a>
+          </div>
           <p className="text-sm text-gray-400">
             Email:{" "}
             <a href="mailto:support@recipedia.com" className="hover:text-red-500 transition-colors duration-300">

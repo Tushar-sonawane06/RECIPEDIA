@@ -90,7 +90,7 @@ const FeedbackForm = ({ onClose, isModal = false }) => {
   };
 
   const formContent = (
-    <div className={feedback-form ${isModal ? 'modal-content' : 'page-content'}}>
+    <div className={`feedback-form ${isModal ? 'modal-content' : 'page-content'}`}>
       {isModal && (
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Share Your Feedback</h2>

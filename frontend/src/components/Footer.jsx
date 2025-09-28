@@ -1,5 +1,6 @@
 import React from "react";
-import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaFacebookF, FaInstagram, FaLinkedinIn } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 import "../styles/Footer.css";
 
 const Footer = () => {
@@ -59,7 +60,7 @@ const Footer = () => {
         <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
         <div className="social-icons flex space-x-6 text-2xl ">
           <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaFacebookF /></a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaTwitter /></a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaXTwitter /></a>
           <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaInstagram /></a>
           <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaLinkedinIn /></a>
         </div>

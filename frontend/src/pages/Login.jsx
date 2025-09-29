@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, XCircle, ChefHat, Sparkles, Eye, EyeOff, ChevronLeft, House } from 'lucide-react';
-
 import ErrorAlert from '../components/ErrorAlert';
 import { authService } from '../services/authService';
 
@@ -20,7 +19,7 @@ const Login = ({ onAuthSuccess }) => {
     password: "",
   });
 
-  const [agreeTerms, setAgreeTerms] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState("");
@@ -55,11 +54,6 @@ const Login = ({ onAuthSuccess }) => {
       errors.password = "Password is required.";
     }
 
-    // You might not need to force agreement on login, only on register.
-    // If you do, this is correct.
-    if (!agreeTerms) {
-      errors.agreeTerms = "You must agree to the Terms & Privacy Policy.";
-    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -395,40 +389,7 @@ const Login = ({ onAuthSuccess }) => {
             )}
           </motion.div>
 
-          <motion.div
-            variants={childVariants}
-            className="flex items-start text-xs sm:flex-row gap-1.5"
-          >
-            <div className="flex items-start flex-grow">
-              <input
-                type="checkbox"
-                id="agreeTerms"
-                name="agreeTerms"
-                checked={agreeTerms}
-                onChange={(e) => {
-                  setAgreeTerms(e.target.checked);
-                  setFieldErrors((prev) => ({ ...prev, agreeTerms: "" }));
-                }}
-                className={`mr-2 w-4 h-4 mt-0.5 rounded accent-red-500 cursor-pointer transition-colors duration-200
-                  ${fieldErrors.agreeTerms ? 'border-red-500' : 'border-gray-300 dark:border-slate-600'}`}
-              />
-              <label htmlFor="agreeTerms" className="text-gray-700 dark:text-gray-300 cursor-pointer leading-tight">
-                I agree to the{" "}
-                <Link to="/terms-conditions" className="text-red-500 font-medium underline-offset-2 hover:text-red-600 dark:hover:text-red-400 hover:underline transition-colors duration-200">
-                  Terms of Use
-                </Link>{" "}
-                &{" "}
-                <Link to="/privacy" className="text-red-500 font-medium underline-offset-2 hover:text-red-600 dark:hover:text-red-400 hover:underline transition-colors duration-200">
-                  Privacy Policy
-                </Link>
-              </label>
-            </div>
-          </motion.div>
-          {fieldErrors.agreeTerms && (
-              <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                <XCircle size={14} /> {fieldErrors.agreeTerms}
-              </p>
-            )}
+
           
           <motion.button
             variants={childVariants}

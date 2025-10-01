@@ -394,7 +394,13 @@ const Login = ({ onAuthSuccess }) => {
               </p>
             )}
           </motion.div>
-
+          <motion.div variants={childVariants} className="relative">
+            <p style={{ marginTop: "6px", textAlign: "center" }}>
+              <Link to="/forgot-password" style={{ color: "red", textDecoration: "none" }}>
+                Forgot Password?
+              </Link>
+            </p>
+          </motion.div>
           <motion.div
             variants={childVariants}
             className="flex items-start text-xs sm:flex-row gap-1.5"

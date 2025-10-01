@@ -17,6 +17,7 @@ const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 const ErrorPage = lazy(() => import("./pages/ErrorPage.jsx"));
 const Explore = lazy(() => import("./pages/Explore.jsx"));
 import * as Sentry from "@sentry/react";
+const ForgotPass = lazy(() => import("./pages/ForgotPass.jsx"));
 
 // Components
 import Navbar from "./components/Header.jsx"; // header component is named Navbar in the import
@@ -34,7 +35,7 @@ function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Determine if current page is an auth page
-  const isAuthPage = location.pathname === "/login" || location.pathname === "/register";
+  const isAuthPage = location.pathname === "/login" || location.pathname === "/register" ||  location.pathname === "/forgot-password";
 
   // Check authentication status on mount and route changes
   useEffect(() => {
@@ -109,6 +110,14 @@ function AppContent() {
               <div className="register-bg">
                 <Register onAuthSuccess={handleAuthSuccess} />
               </div>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+            <div className="login-bg">
+            <ForgotPass />
+            </div>
             }
           />
 

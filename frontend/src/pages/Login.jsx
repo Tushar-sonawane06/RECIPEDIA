@@ -27,6 +27,7 @@ const Login = ({ onAuthSuccess }) => {
 
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Contact, Mail, Phone, MapPin } from "lucide-react";
+import { Contact, Mail, Phone, MapPin, Twitter, Linkedin } from "lucide-react";
 
 export default function ContactUs() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -11,7 +12,13 @@ export default function ContactUs() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    // Simulating API call
+    setTimeout(() => {
+      setSubmitted(true);
+      setLoading(false);
+    }, 1500);
   }
 
   return (
@@ -28,22 +35,33 @@ export default function ContactUs() {
 
           <div className="space-y-4 text-blue-50 dark:text-blue-100">
             <div className="flex items-center gap-3">
-              <Mail className="w-5 h-5" /> support@recipedia.com
+              <Mail className="w-5 h-5" aria-hidden="true" /> 
+              <span>support@recipedia.com</span>
             </div>
             <div className="flex items-center gap-3">
-              <Phone className="w-5 h-5" /> +91-123-456-7890
+              <Phone className="w-5 h-5" aria-hidden="true" /> 
+              <span>+91-123-456-7890</span>
             </div>
             <div className="flex items-center gap-3">
-              <MapPin className="w-5 h-5" />  India
+              <MapPin className="w-5 h-5" aria-hidden="true" /> 
+              <span>India</span>
             </div>
           </div>
 
           <div className="flex gap-4 mt-6">
-            <a href="https://twitter.com/recipedia" aria-label="Twitter" className="hover:text-blue-200">
-              <i data-lucide="twitter" className="w-6 h-6"></i>
+            <a
+              href="https://twitter.com/"
+              aria-label="Twitter"
+              className="hover:text-blue-200"
+            >
+              <Twitter className="w-6 h-6" />
             </a>
-            <a href="https://linkedin.com/company/recipedia" aria-label="LinkedIn" className="hover:text-blue-200">
-              <i data-lucide="linkedin" className="w-6 h-6"></i>
+            <a
+              href="https://linkedin.com/"
+              aria-label="LinkedIn"
+              className="hover:text-blue-200"
+            >
+              <Linkedin className="w-6 h-6" />
             </a>
           </div>
         </div>
@@ -69,44 +87,68 @@ export default function ContactUs() {
               onSubmit={handleSubmit}
               autoComplete="off"
             >
-              <label className="block mb-3 font-medium text-zinc-700 dark:text-zinc-200">
+              <label
+                htmlFor="name"
+                className="block mb-3 font-medium text-zinc-700 dark:text-zinc-200"
+              >
                 Name
                 <input
+                  id="name"
                   type="text"
                   name="name"
                   value={form.name}
                   onChange={handleChange}
                   required
+                  minLength={2}
+                  aria-label="Name"
                   className="mt-1 block w-full p-2 border border-gray-300 dark:border-zinc-700 rounded bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
                 />
               </label>
-              <label className="block mb-3 font-medium text-zinc-700 dark:text-zinc-200">
+              <label
+                htmlFor="email"
+                className="block mb-3 font-medium text-zinc-700 dark:text-zinc-200"
+              >
                 Email
                 <input
+                  id="email"
                   type="email"
                   name="email"
                   value={form.email}
                   onChange={handleChange}
                   required
+                  pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                  aria-label="Email"
                   className="mt-1 block w-full p-2 border border-gray-300 dark:border-zinc-700 rounded bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
                 />
               </label>
-              <label className="block mb-4 font-medium text-zinc-700 dark:text-zinc-200">
+              <label
+                htmlFor="message"
+                className="block mb-4 font-medium text-zinc-700 dark:text-zinc-200"
+              >
                 Message
                 <textarea
+                  id="message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
                   required
+                  minLength={10}
                   rows="4"
+                  aria-label="Message"
                   className="mt-1 block w-full p-2 border border-gray-300 dark:border-zinc-700 rounded bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100"
                 />
               </label>
               <button
                 type="submit"
-                className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600 font-semibold w-full"
+                disabled={loading}
+                aria-label="Send Message"
+                className="bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600 font-semibold w-full flex items-center justify-center"
               >
-                Send Message
+                {loading ? (
+                  <span className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></span>
+                ) : (
+                  "Send Message"
+                )}
               </button>
             </form>
           )}

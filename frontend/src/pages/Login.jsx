@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from 'framer-motion';
 import { Mail, Lock, ArrowRight, XCircle, ChefHat, Sparkles, Eye, EyeOff, ChevronLeft, House } from 'lucide-react';
-
 import ErrorAlert from '../components/ErrorAlert';
 import { authService } from '../services/authService';
 
@@ -20,7 +19,7 @@ const Login = ({ onAuthSuccess }) => {
     password: "",
   });
 
-  const [agreeTerms, setAgreeTerms] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [generalError, setGeneralError] = useState("");
@@ -28,6 +27,7 @@ const Login = ({ onAuthSuccess }) => {
 
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -55,11 +55,6 @@ const Login = ({ onAuthSuccess }) => {
       errors.password = "Password is required.";
     }
 
-    // You might not need to force agreement on login, only on register.
-    // If you do, this is correct.
-    if (!agreeTerms) {
-      errors.agreeTerms = "You must agree to the Terms & Privacy Policy.";
-    }
 
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
@@ -394,7 +389,13 @@ const Login = ({ onAuthSuccess }) => {
               </p>
             )}
           </motion.div>
-
+          <motion.div variants={childVariants} className="relative">
+            <p style={{ marginTop: "6px", textAlign: "center" }}>
+              <Link to="/forgot-password" style={{ color: "red", textDecoration: "none" }}>
+                Forgot Password?
+              </Link>
+            </p>
+          </motion.div>
           <motion.div
             variants={childVariants}
             className="flex items-start text-xs sm:flex-row gap-1.5"

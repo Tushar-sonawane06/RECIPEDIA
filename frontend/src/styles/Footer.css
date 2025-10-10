@@ -1,15 +1,29 @@
 .footer {
   background-color: #1a202c;
   color: #f7fafc;
-  padding: 40px 20px;
+  padding: 24px 24px 4px;
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  text-align: left;
   line-height: 1.6;
-}.footer-link {
+}
+/* Increase horizontal padding on larger screens */
+@media (min-width: 768px) {
+  .footer {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+@media (min-width: 1024px) {
+  .footer {
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+.footer-link {
   color: #f7fafc;
   text-decoration: none;
   position: relative;
@@ -55,11 +69,11 @@
 
 .footer-container {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  max-width: 1200px;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  max-width: 100%;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .footer-section {
@@ -67,15 +81,30 @@
   gap: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-left: 28px;
-  margin-right: 28px;
+  align-items: flex-start;
+  margin-left: 90px;
+  margin-right: 70px;
+}
 
+/* Reduce right margin for Quick Links section (second section) */
+.footer-container .footer-section:nth-child(2) {
+  margin-right: 5px;
+}
+
+/* Remove extra space on the far right column and shift follow us section to the left */
+.footer-container .footer-section:last-child {
+  margin-right: 60px;
+  margin-left: 5px;
+}
+
+/* Add left padding to the first footer section */
+.footer-container .footer-section:first-child {
+  margin-left: 100px;
 }
 
 .footer-section h3,
 .footer-section h4 {
-  margin-bottom: 15px;
+  margin-bottom: 8px;
   font-weight: 700;
   letter-spacing: 1px;
   font-family: 'Poppins', sans-serif;
@@ -89,7 +118,7 @@
 }
 
 .footer-section ul li {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .footer-section ul li a {
@@ -107,14 +136,17 @@
   transform: translateX(5px);
 }
 .social h4{
-  margin-top: 62px;
+  margin-top: 24px;
 }
 .social-icons {
   display: flex;
-  gap: 20px;
-  justify-content: center;
+  gap: 0;
+  justify-content: flex-start;
   width: 100%;
- 
+}
+/* Override Tailwind's space-x-6 to reduce spacing between icons */
+.social-icons > * + * {
+  margin-left: 8px;
 }
 
 .social-icons a {
@@ -136,13 +168,116 @@
 }
 
 .footer-bottom {
-  border-top: 1px solid #2d3748;
-  padding-top: 15px;
+  position: relative;
+  border-top: none;
+  padding-top: 4px;
+  padding-bottom: 2px;
+  /* Extend the border line to full width by offsetting footer padding */
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
   text-align: center;
   font-size: 13px;
   letter-spacing: 0.5px;
   font-weight: 500;
   font-family: 'Poppins', sans-serif;
+}
+
+/* Full-viewport width divider at the very top of footer-bottom */
+.footer-bottom::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  border-top: 2px solid #374151;
+}
+
+@media (min-width: 768px) {
+  .footer-bottom {
+    margin-left: -32px;
+    margin-right: -32px;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-bottom {
+    margin-left: -64px;
+    margin-right: -64px;
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+}
+
+/* Newsletter Styles */
+.newsletter-form {
+  width: 100%;
+}
+
+.newsletter-input-group {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 12px 16px;
+  background-color: #2d3748;
+  border: 2px solid #4a5568;
+  color: #f7fafc;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.newsletter-input::placeholder {
+  color: #a0aec0;
+}
+
+.newsletter-input:focus {
+  border-color: #f6ad55;
+  background-color: #374151;
+  box-shadow: 0 0 0 3px rgba(246, 173, 85, 0.1);
+}
+
+.newsletter-button {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f6ad55, #e53e3e);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.newsletter-button:hover {
+  background: linear-gradient(135deg, #ed8936, #c53030);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.newsletter-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.newsletter-privacy {
+  font-size: 11px;
+  line-height: 1.4;
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {
@@ -152,9 +287,44 @@
   }
 
   .footer-section {
-    margin: 15px 0;
+    margin: 8px 0;
     text-align: center;
     width: 90%;
     max-width: 400px;
+  }
+  /* Remove extra space before the divider on mobile */
+  .footer-container .footer-section:last-child {
+    margin-bottom: 0;
+  }
+  .social-icons {
+    justify-content: center;
+  }
+
+  /* Newsletter responsive adjustments */
+  .newsletter-input-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .newsletter-input {
+    border-radius: 8px;
+    border: 2px solid #4a5568;
+  }
+
+  .newsletter-button {
+    border-radius: 8px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .newsletter-input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .newsletter-button {
+    padding: 10px 16px;
+    font-size: 13px;
   }
 }

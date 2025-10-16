@@ -11,16 +11,41 @@ const Footer = () => {
         {/* Logo & Mission */}
         <div className="footer-section about">
           <h4 className="text-xl font-semibold text-amber-400 mb-3">Recipedia</h4>
-          <p className="text-sm leading-relaxed text-gray-400">
+          <p className="text-sm leading-relaxed text-gray-400 mb-4">
             Your go-to platform for sharing and discovering delicious recipes from around the world.
             Join our food-loving community!
           </p>
+          
+          {/* Newsletter */}
+          <div className="newsletter">
+            <h4 className="text-lg font-semibold text-amber-400 mb-3">Subscribe to Our Newsletter</h4>
+            <p className="text-sm text-gray-400 mb-4">
+              Get the latest recipes, cooking tips, and exclusive offers delivered to your inbox.
+            </p>
+            <form className="newsletter-form">
+              <div className="newsletter-input-group">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="newsletter-input"
+                  required
+                />
+                <button type="submit" className="newsletter-button">
+                  Subscribe
+                </button>
+              </div>
+              <p className="newsletter-privacy text-xs text-gray-500 mt-2">
+                We respect your privacy. Unsubscribe at any time.
+              </p>
+            </form>
+          </div>
         </div>
 
         {/* Quick Links */}
         <div className="footer-section links">
           <h4 className="text-lg font-semibold text-amber-400 mb-3">Quick Links</h4>
           <ul>
+            <li><Link to="/" className="hover:text-white transition-colors duration-300">Home</Link></li>
             <li><Link to="/about" className="hover:text-white transition-colors duration-300">About</Link></li>
             <li><Link to="/add-recipe" className="hover:text-white transition-colors duration-300">Add Recipe</Link></li>
             <li><Link to="/profile" className="hover:text-white transition-colors duration-300">Profile</Link></li>
@@ -57,17 +82,17 @@ const Footer = () => {
             </a>
           </p>
           <p className="text-sm text-gray-400">Phone: +91-123-456-7890</p>
-        </div>
-      </div>
 
-      {/* Social Icons */}
-      <div className="footer-section mb-6 links">
-        <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
-        <div className="social-icons flex space-x-6 text-2xl">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaFacebookF /></a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaXTwitter /></a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaInstagram /></a>
-          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaLinkedinIn /></a>
+          {/* Follow Us */}
+          <div className="mt-4">
+            <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
+            <div className="social-icons flex space-x-6 text-2xl">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaFacebookF /></a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaXTwitter /></a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaInstagram /></a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 transition-colors duration-300"><FaLinkedinIn /></a>
+            </div>
+          </div>
         </div>
       </div>
 
